@@ -1,27 +1,60 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\MedicalRecordController;
+// use App\Http\Controllers\ConfigController;
 use Illuminate\Support\Facades\Route;
 
+// Página inicial
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Rotas protegidas por autenticação
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::get('/client', function () {
-    return view('client');
-})->middleware(['auth', 'verified'])->name('client');
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Pacientes
+    Route::prefix('/pacientes')->group(function () {
+        Route::get('/', [PatientController::class, 'index'])->name('index.patient');
+        Route::get('/dash/{id}', [PatientController::class, 'show'])->name('patients.show');
+        Route::get('/dash/{id}/edit', [PatientController::class, 'edit'])->name('patients.edit');
+        Route::post('/', [PatientController::class, 'store'])->name('patients.store');
+    });
+
+    // Prontuários
+    Route::prefix('prontuarios')->group(function () {
+        Route::get('/', [MedicalRecordController::class, 'index'])->name('index.medical-record');
+        Route::get('/{id}', [MedicalRecordController::class, 'show'])->name('medical-records.show');
+        Route::get('/{id}/edit', [MedicalRecordController::class, 'edit'])->name('medical-records.edit');
+        Route::post('/{id}/upload', [MedicalRecordController::class, 'upload'])->name('medical-records.upload');
+        Route::put('/{id}', [MedicalRecordController::class, 'update'])->name('medical-records.update');
+
+        // Rotas para Sessões
+        Route::post('/{id}/sessions', [SessionController::class, 'store'])->name('sessions.store');
+        Route::get('/sessions/{id}', [SessionController::class, 'show'])->name('sessions.show');
+        Route::put('/sessions/{id}', [SessionController::class, 'update'])->name('sessions.update');
+    });
+
+    // Configurações
+    Route::get('/configuracoes', [ConfigController::class, 'index'])->name('settings');
+
+    // Perfil do usuário
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+
+    Route::get('/sessoes/{id}', [SessionController::class, 'show'])->name('session.show');
+    Route::get('/sessoes/{id}/edit', [SessionController::class, 'edit'])->name('session.edit');
 });
 
-
-
+// Rotas de autenticação
 require __DIR__.'/auth.php';
-require __DIR__.'/client.php';
+

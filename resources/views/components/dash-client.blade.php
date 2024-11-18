@@ -1,15 +1,44 @@
-<div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Pacientes Pendentes -->
-                <div class="bg-white shadow-lg rounded-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-600">Pacientes Pendentes</h2>
-                        <p class="text-4xl font-bold text-red-500 mt-4">45</p>
-                </div>
-        
-                <!-- Pacientes Atendidos -->
-                <div class="bg-white shadow-lg rounded-lg p-6">
-                        <h2 class="text-xl font-semibold text-gray-600">Pacientes Atendidos</h2>
-                        <p class="text-4xl font-bold text-green-500 mt-4">120</p>
-                </div>
-        </div>
-</div>
+<div class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">
+                        {{ __('Paciente') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">
+                        {{ __('Idade') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">
+                        {{ __('Diagnóstico') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">
+                        {{ __('Ações') }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach ($pacients as $pacient)
+                        <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                                        {{ $pacient->name }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        {{ $pacient->age }} {{ __('anos') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        {{ $pacient->diagnosis ?? __('Não informado') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                        <a href="{{ route('patients.show', $pacient->id) }}" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                                {{ __('Visualizar') }}
+                                        </a>
+                                        <a href="{{ route('patients.edit', $pacient->id) }}" class="text-yellow-600 dark:text-yellow-400 hover:underline">
+                                                {{ __('Editar') }}
+                                        </a>
+                                </td>
+                        </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
