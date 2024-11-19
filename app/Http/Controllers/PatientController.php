@@ -64,5 +64,24 @@ class PatientController extends Controller
     
         // Retorna a view paciente
         return view('index.patient', compact('patients'));
-    }    
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validação dos dados
+        // $validatedData = $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'date_birth' => 'required|date',
+        //     'email' => 'required|email|max:255',
+        //     'phone' => 'required|string|max:15',
+        //     'gender' => 'required|string',
+        // ]);
+    
+        // // Atualizar os dados do paciente
+        // $patient = Patient::findOrFail($id);
+        // $patient->update($validatedData);
+    
+        // Redirecionar para a tela inicial com uma mensagem de sucesso
+        return redirect()->route('index.patient')->with('success', 'Paciente atualizado com sucesso!');
+    }
 }

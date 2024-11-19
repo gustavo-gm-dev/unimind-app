@@ -3,7 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicalRecordController;
-// use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\ConfigController;
 use Illuminate\Support\Facades\Route;
 
 // Página inicial
@@ -24,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [PatientController::class, 'index'])->name('index.patient');
         Route::get('/dash/{id}', [PatientController::class, 'show'])->name('patients.show');
         Route::get('/{id}/edit', [PatientController::class, 'edit'])->name('patients.edit');
-        Route::post('/', [PatientController::class, 'update'])->name('patients.update');
+        Route::put('/{id}/update', [PatientController::class, 'update'])->name('patients.update');
     });
 
     // Prontuários

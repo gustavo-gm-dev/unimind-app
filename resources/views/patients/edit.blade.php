@@ -114,7 +114,6 @@
                             {{ __('Salvar') }}
                         </x-primary-button>
                     </div>
-                    
                 </form>
             </div>
         </div>
