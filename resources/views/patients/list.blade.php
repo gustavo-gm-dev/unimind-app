@@ -1,4 +1,3 @@
-@vite(['resources/js/patient.js'])
 <div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
     <div class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -46,8 +45,10 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
                             <!-- Botão para Editar Cadastro -->
-                            <x-link-button onclick="loadEditForm({{ $patient->id }})">
-                                {{ __('Cadastro') }}
+                            <x-link-button>
+                                <a href="{{ route('patients.edit', $patient->id) }}">
+                                    {{ __('Cadastro') }}
+                                </a>
                             </x-link-button>
                             <!-- Botão para Acessar Prontuário -->
                             <x-link-button>

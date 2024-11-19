@@ -23,8 +23,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('/pacientes')->group(function () {
         Route::get('/', [PatientController::class, 'index'])->name('index.patient');
         Route::get('/dash/{id}', [PatientController::class, 'show'])->name('patients.show');
-        Route::get('/dash/{id}/edit', [PatientController::class, 'edit'])->name('patients.edit');
-        Route::post('/', [PatientController::class, 'store'])->name('patients.store');
+        Route::get('/{id}/edit', [PatientController::class, 'edit'])->name('patients.edit');
+        Route::post('/', [PatientController::class, 'update'])->name('patients.update');
     });
 
     // Prontuários

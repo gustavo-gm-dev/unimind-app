@@ -24,15 +24,14 @@ class PatientController extends Controller
             'email' => 'joao.silva@example.com',
             'cpf' => '123.456.789-10',
             'rg' => '12.345.678-9',
-            'telefone' => '(11) 98765-4321',
-            'data_nascimento' => '1985-05-20',
-            'escolaridade' => 'superior',
-            'genero' => 'masculino',
-            'periodo' => 'manha',
-            'horario' => '08:30',
-            'atendimento' => 'presencial',
+            'phone' => '(11) 98765-4321',
+            'date_birth' => '1985-05-20',
+            'education' => 'superior',
+            'gender' => 'masculino',
+            'period' => 'manha',
+            'service' => 'presencial',
         ];
-        return view('patients.edit', compact('patient'));
+        return view('index.patient', compact('patient'));
     }
     
     public function index()

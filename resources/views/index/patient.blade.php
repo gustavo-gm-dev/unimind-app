@@ -6,7 +6,12 @@
     </x-slot>
 
     <!-- Lista de Pacientes -->
-    @include('patients.list', ['patients' => $patients])
+    
 
-
+    <!-- Formulário de Edição -->
+    @if (request()->routeIs('patients.edit') && isset($patient))
+        @include('patients.edit', ['patient' => $patient])
+    @else
+        @include('patients.list', ['patients' => $patients])
+    @endif
 </x-app-layout>
