@@ -41,6 +41,28 @@ class SessionController extends Controller
         return view('index.medical-record', compact('medicalRecord', 'patient'));
     }
 
+    public function upload(Request $request, $id)
+    {
+        $request->validate(['file' => 'required|mimes:pdf,doc,docx,txt|max:2048']);
+
+        $file = $request->file('file');
+        $filePath = $file->storeAs("sessions/$id", $file->getClientOriginalName());
+
+        // Retorne para a página com sucesso
+        return redirect()->back()->with('success', 'Arquivo enviado com sucesso!');
+    }
+
+    public function view($id, $file)
+    {
+        //$filePath = public_path("files/patients/$id/$file");
+        $filePath = public_path("files/patients/1/PRONT_1_20241120190100.pdf");
+
+        if (!file_exists($filePath)) {
+            abort(404, 'Arquivo não encontrado.');
+        }
+
+        return response()->file($filePath);
+    }
 
     /**
      * Lista todas as sessões.

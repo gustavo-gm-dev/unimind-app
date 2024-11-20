@@ -44,14 +44,37 @@
                     @method('PUT')
                 @endif
 
-                <!-- Exibição de Informações do Prontuário -->
+                
                 @isset($medicalRecord->prontuario_id)
-                    <div class="mb-4">
-                        <p class="text-sm text-gray-600"><strong>{{ __('Data de Cadastro:') }}</strong> {{ $medicalRecord->prontuario_dt_register }}</p>
+                    
+                <div class="flex items-center justify-between">
+                    <!-- Informações do Prontuário -->
+                    <div class="flex-1">
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600">
+                                <strong>{{ __('Data de Cadastro:') }}</strong> {{ $medicalRecord->prontuario_dt_register }}
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600">
+                                <strong>{{ __('Última Atualização:') }}</strong> {{ $medicalRecord->prontuario_dt_update }}
+                            </p>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <p class="text-sm text-gray-600"><strong>{{ __('Última Atualização:') }}</strong> {{ $medicalRecord->prontuario_dt_update }}</p>
+                
+                    <!-- Ícone de Visualizar -->
+                    <div class="flex-none w-auto">
+                        <div class="flex justify-end">
+                            <a href="{{ route('sessions.view', ['id' => $patient->id, 'file' => $patient->lastFile]) }}" 
+                               class="cursor-pointer bg-blue-100 hover:bg-blue-200 rounded-full p-2 inline-flex items-center transition duration-150 ease-in-out">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 -960 960 960" fill="#5985E1">
+                                    <path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v240h-80v-200H520v-200H240v640h360v80H240Zm638 15L760-183v89h-80v-226h226v80h-90l118 118-56 57Zm-638-95v-640 640Z"/>
+                                </svg>
+                            </a>
+                        </div>                        
                     </div>
+                </div>
+                
                 @endisset
 
                 <!-- Formulário de Preenchimento -->

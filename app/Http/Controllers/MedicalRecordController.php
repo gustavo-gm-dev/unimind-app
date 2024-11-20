@@ -97,6 +97,7 @@ class MedicalRecordController extends Controller
             'date_birth' => '1985-05-20',
             'education' => 'superior',
             'gender' => 'masculino',
+            'lastFile' => 'PRONT_1_20241120190100.pdf'
         ];
 
         $medicalRecord = (object)[
