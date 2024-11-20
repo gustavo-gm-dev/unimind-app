@@ -36,10 +36,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{id}/upload', [MedicalRecordController::class, 'upload'])->name('medical-records.upload');
         Route::put('/{id}', [MedicalRecordController::class, 'update'])->name('medical-records.update');
 
+        Route::put('/medical-records/{id}/save', [MedicalRecordController::class, 'save'])->name('medical-records.save');
+
         // Rotas para Sessões
         Route::post('/{id}/sessions', [SessionController::class, 'store'])->name('sessions.store');
         Route::get('/sessions/{id}', [SessionController::class, 'show'])->name('sessions.show');
         Route::put('/sessions/{id}', [SessionController::class, 'update'])->name('sessions.update');
+
+        Route::get('/sessions/{id}', [SessionController::class, 'start'])->name('sessions.start');
     });
 
     // Configurações
