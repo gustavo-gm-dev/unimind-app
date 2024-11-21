@@ -52,7 +52,7 @@
                             </x-link-button>
                             <!-- Botão para Acessar Prontuário -->
                             <x-link-button>
-                                <a href="{{ route('medical-records.show', $patient->id) }}">
+                                <a href="{{ route('medical-records.edit', $patient->id) }}">
                                     {{ __('Prontuário') }}
                                 </a>
                             </x-link-button>
