@@ -5,6 +5,12 @@
         </h2>
     </x-slot>
 
+    @if (session('success'))
+    <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
+        {{ session('success') }}
+    </div>
+@endif
+
     @if (request()->routeIs('medical-records.edit') && isset($patient))
         @include('medical-records.edit', ['patient' => $patient, 'medicalRecord' => $medicalRecord, 'sessions' => $sessions])
     @elseif (request()->routeIs('sessions.start') && isset($medicalRecord))

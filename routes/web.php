@@ -45,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/sessions/{id}', [SessionController::class, 'start'])->name('sessions.start');
         Route::get('/sessions/{id}/view/{file}', [SessionController::class, 'view'])->name('sessions.view');
-        Route::post('/sessions/{id}/upload', [SessionController::class, 'upload'])->name('sessions.upload');
+        Route::post('/sessions/{idPatient}/upload/{idRecord}', [SessionController::class, 'upload'])->name('sessions.upload');
     });
 
     // Configurações

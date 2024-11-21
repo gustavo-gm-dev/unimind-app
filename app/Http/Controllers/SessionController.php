@@ -41,16 +41,35 @@ class SessionController extends Controller
         return view('index.medical-record', compact('medicalRecord', 'patient'));
     }
 
-    public function upload(Request $request, $id)
+    public function upload(Request $request, $idPatient, $idRecord)
     {
-        $request->validate(['file' => 'required|mimes:pdf,doc,docx,txt|max:2048']);
-
-        $file = $request->file('file');
-        $filePath = $file->storeAs("sessions/$id", $file->getClientOriginalName());
-
-        // Retorne para a página com sucesso
-        return redirect()->back()->with('success', 'Arquivo enviado com sucesso!');
+        // Validação dos arquivos
+        $request->validate([
+            'files.*' => 'required|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
+        ]);
+    
+        // Caminho do diretório com base no ID do paciente
+        $directory = public_path("files/patients/$idPatient");
+    
+        // Cria o diretório se ele não existir
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+    
+        foreach ($request->file('files') as $file) {
+            // Nome do arquivo: PRONT_{id}_{timestamp}.pdf
+            $timestamp = now()->format('YmdHis'); // Formato: AAAAMMDDHHMMSS
+            $fileName = "PRONT_{$idRecord}_{$timestamp}." . $file->getClientOriginalExtension();
+    
+            // Salva o arquivo no diretório público
+            $file->move($directory, $fileName);
+        }
+    
+        //return redirect()->back()->with('success', 'Arquivos enviados com sucesso!');
+        return redirect()->route('medical_records.edit')->with('success', 'Arquivos enviados com sucesso!');
     }
+    
+    
 
     public function view($id, $file)
     {

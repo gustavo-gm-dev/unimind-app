@@ -113,3 +113,99 @@
         </div>
     </div>
 </div>
+
+<div class="py-4">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg px-4 py-2">
+            <!-- Dropdown para Exibir os Dados do Paciente -->
+            <x-dropdown-list>
+                <x-slot name="trigger">
+                    <button class="inline-flex items-center px-3 py-2 border border-transparent leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                        <div class="w-full text-left text-gray-800 font-medium">
+                            {{ __('Deseja subir um arquivo?') }}
+                        </div>
+                        <div class="ms-1">
+                            <svg :class="{ 'rotate-180': open }" class="fill-current h-4 w-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </button>
+                </x-slot>
+
+                <x-slot name="content">
+                    <div class="px-6">
+                        <form action="{{ route('sessions.upload', ['idPatient' => $patient->id, 'idRecord' => $medicalRecord->prontuario_id]) }}" method="POST" enctype="multipart/form-data" id="uploadForm1">
+                            @csrf
+                            
+                            <!-- Input para Data da Sessão -->
+                            <div class="mb-4">
+                                <label for="session_date" class="block text-sm font-medium text-gray-700">{{ __('Data da Sessão') }}</label>
+                                <input 
+                                    type="date" 
+                                    name="session_date" 
+                                    id="session_date" 
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
+                                    required
+                                />
+                            </div>
+                            
+                            <!-- Input para Hora Executada -->
+                            <div class="mb-4">
+                                <label for="session_time" class="block text-sm font-medium text-gray-700">{{ __('Hora Executada') }}</label>
+                                <input 
+                                    type="time" 
+                                    name="session_time" 
+                                    id="session_time" 
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
+                                    required
+                                />
+                            </div>
+                            
+                            <!-- Input para Arquivo -->
+                            <div class="mb-4">
+                                <label for="fileInput1" class="block text-sm font-medium text-gray-700">{{ __('Selecione um Arquivo') }}</label>
+                                <input 
+                                    type="file" 
+                                    name="files[]" 
+                                    id="fileInput1"
+                                    accept="image/*,application/pdf"
+                                    class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
+                                    multiple 
+                                    onchange="displaySelectedFiles(this)"
+                                />
+                            </div>
+                            
+                            <!-- Exibição de Arquivos Selecionados -->
+                            <div id="selectedFilesList" class="mt-2 text-sm text-gray-600">
+                                <!-- Arquivos selecionados serão exibidos aqui -->
+                            </div>
+    
+                            <!-- Botão para Submeter -->
+                            <div class="mt-8 flex justify-end">
+                                <x-primary-button>
+                                    {{ __('Subir Arquivo') }}
+                                </x-primary-button>
+                            </div>
+                        </form>
+                    </div>
+                </x-slot>
+            </x-dropdown-list>
+        </div>
+    </div>
+</div>
+
+<script>
+    function displaySelectedFiles(input) {
+        const fileList = input.files;
+        const fileDisplay = document.getElementById('selectedFilesList');
+        fileDisplay.innerHTML = '';
+
+        if (fileList.length > 0) {
+            Array.from(fileList).forEach(file => {
+                const listItem = document.createElement('p');
+                listItem.textContent = file.name;
+                fileDisplay.appendChild(listItem);
+            });
+        }
+    }
+</script>
