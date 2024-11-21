@@ -1,5 +1,5 @@
 <div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
-    <div class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+    <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead class="bg-gray-50 dark:bg-gray-800">
                 <tr>
@@ -61,11 +61,5 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-</div>
-
-<div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
-    <div class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-        <div id="edit-form-container"></div>
     </div>
 </div>
