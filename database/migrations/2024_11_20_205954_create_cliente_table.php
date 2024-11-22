@@ -6,111 +6,126 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('cliente', function (Blueprint $table) {
-            $table->id('cliente_Id');
-            $table->string('cliente_nome',length : 255);
-            $table->string('cliente_cpf',length : 14);
-            $table->string('cliente_rg',length : 15);
-            $table->string('cliente_email',length : 255);
-            $table->decimal('cliente_DDD', 2);
-            $table->decimal('cliente_telefone', 9);
-            $table->timestamps();
+        Schema::create('clientes', function (Blueprint $table) {
+            $table->id('cliente_id');
+            $table->string('cliente_nome', 255);
+            $table->string('cliente_cpf', 14);
+            $table->string('cliente_rg', 15);
+            $table->string('cliente_email', 255);
+            $table->string('cliente_ddd', 2);
+            $table->string('cliente_telefone', 15);
             $table->date('cliente_dt_nascimento');
-            $table->string('cliente_id_escolaridade',length : 255);
-            $table->string('cliente_genero',length : 1);
-            $table->string('cliente_periodo_preferencia',length : 1);
-            $table->time('cliente_horario_preferencia');
-            $table->decimal('cliente_necessidade_Id',1,0);
-            $table->decimal('cliente_st_confirma_dados', 1,0);
-        });
-
-        Schema::create('cliente_necessidade', function (Blueprint $table) {
-            $table->id('cliente_necessidade_id');
-            $table->integer('cliente_necessidade_necessidade_id');
-            $table->integer('cliente_necessidade_cliente_id');
+            $table->string('cliente_escolaridade', 50);
+            $table->string('cliente_genero', 1);
+            $table->string('cliente_periodo_preferencia', 20);
+            $table->boolean('cliente_st_confirma_dados')->default(false);
+            $table->enum('cliente_tipo_atendimento', ['Presencial', 'Remoto'])->default('Presencial');
             $table->timestamps();
         });
-        Schema::create('necessidade', function (Blueprint $table) {
+
+        Schema::create('necessidades', function (Blueprint $table) {
             $table->id('necessidade_id');
-            $table->integer('necessidade_nome');
-        });
-
-        Schema::create('contato', function (Blueprint $table) {
-            $table->id('contato_Id');
-            $table->integer('contato_cliente_id');
-            $table->string('contato_nome',length : 150);
-            $table->string('contato_telefone',length : 150);
-            $table->string('contato_situacao',length : 1);
-            $table->string('contato_Emergencia',length : 1);
+            $table->string('necessidade_nome', 255);
             $table->timestamps();
         });
 
-        Schema::create('endereco', function (Blueprint $table) {
+        Schema::create('cliente_necessidades', function (Blueprint $table) {
+            $table->id('cliente_necessidade_id');
+            $table->unsignedBigInteger('cliente_id');
+            $table->unsignedBigInteger('necessidade_id');
+            $table->timestamps();
+
+            $table->foreign('cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
+            $table->foreign('necessidade_id')->references('necessidade_id')->on('necessidades')->onDelete('cascade');
+        });
+
+        Schema::create('contatos', function (Blueprint $table) {
+            $table->id('contato_id');
+            $table->unsignedBigInteger('cliente_id');
+            $table->string('contato_nome', 150);
+            $table->string('contato_telefone', 150);
+            $table->string('contato_situacao', 1);
+            $table->string('contato_emergencia', 1);
+            $table->timestamps();
+
+            $table->foreign('cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
+        });
+
+        Schema::create('enderecos', function (Blueprint $table) {
             $table->id('endereco_id');
-            $table->integer('endereco_cliente_id');
-            $table->string('endereco_logradouro',length : 255);
+            $table->unsignedBigInteger('cliente_id');
+            $table->string('endereco_logradouro', 255);
             $table->integer('endereco_numero');
-            $table->string('endereco_complemento',length : 255);
-            $table->string('endereco_bairro',length : 100);
-            $table->string('endereco_cidade',length : 100);
-            $table->string('endereco_uf',length : 2);
-            $table->string('endereco_cep',length : 8);
-            $table->string('endereco_pais',length : 25);
+            $table->string('endereco_complemento', 255)->nullable();
+            $table->string('endereco_bairro', 100);
+            $table->string('endereco_cidade', 100);
+            $table->string('endereco_uf', 2);
+            $table->string('endereco_cep', 8);
+            $table->string('endereco_pais', 25);
             $table->timestamps();
+
+            $table->foreign('cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
         });
 
-        Schema::create('usuario_cliente', function (Blueprint $table) {
-            $table->id('usuario_cliente_Id');
-            $table->integer('usuario_cliente_usuario_id');
-            $table->integer('usuario_cliente_cliente_id');
-            $table->dateTime('usuario_cliente_dt_expiracao');
-            $table->timestamps();
-        });
-
-        Schema::create('prontuario', function (Blueprint $table) {
+        Schema::create('prontuarios', function (Blueprint $table) {
             $table->id('prontuario_id');
-            $table->integer('prontuario_cliente_id');
-            $table->string('prontuario_tx_historico_familiar');
-            $table->string('prontuario_tx_historico_social');
-            $table->string('prontuario_tx_consideracoes');
-            $table->string('prontuario_tx_observacao');
-            $table->integer('prontuario_st_validacao_prof')->default('0');
+            $table->unsignedBigInteger('prontuario_cliente_id'); // Chave estrangeira para cliente
+            $table->text('prontuario_tx_historico_familiar');
+            $table->text('prontuario_tx_historico_social');
+            $table->text('prontuario_tx_consideracoes');
+            $table->text('prontuario_tx_observacao');
+            $table->boolean('prontuario_st_validacao_prof')->default(false);
             $table->timestamps();
+        
+            // Definindo a chave estrangeira
+            $table->foreign('prontuario_cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
         });
-
-        Schema::create('cliente_arquivo', function (Blueprint $table) {
-            $table->id('cliente_arquivo_id');
-            $table->integer('cliente_arquivo_cliente_id');
-            $table->integer('cliente_arquivo_arquivo_id');
-            $table->timestamps();
-        });
+        
 
         Schema::create('arquivos', function (Blueprint $table) {
-            $table->id('arquivos_id');
-            $table->string('arquivos_url');
-            $table->integer('cliente_arquivo_arquivo_id');
-            $table->timestamps();
+            $table->id('arquivo_id');
+            $table->unsignedBigInteger('prontuario_id');
+            $table->string('arquivo_url');
+            $table->date('arquivo_dt_realizada');
+            $table->timestamps(); 
+        
+            // Chave estrangeira para vincular ao prontuario
+            $table->foreign('prontuario_id')->references('prontuario_id')->on('prontuarios')->onDelete('cascade');
         });
+        
 
+        Schema::create('sessoes', function (Blueprint $table) {
+            $table->id('sessao_id');
+            $table->unsignedBigInteger('sessao_prontuario_id'); // Chave estrangeira para prontuários
+            $table->dateTime('sessao_dt_inicio');
+            $table->dateTime('sessao_dt_fim');
+            $table->text('sessao_tx_principal')->nullable();
+            $table->text('sessao_tx_procedimento')->nullable();
+            $table->text('sessao_tx_encaminhamento')->nullable();
+            $table->text('sessao_tx_observacao')->nullable();
+            $table->enum('sessao_tipo_atendimento', ['Presencial', 'Remoto'])->default('Presencial');
+            $table->boolean('sessao_st_presenca')->default(false);
+            $table->boolean('sessao_st_confirmado')->default(false);
+            $table->timestamps();
+        
+            // Definindo a chave estrangeira
+            $table->foreign('sessao_prontuario_id')->references('prontuario_id')->on('prontuarios')->onDelete('cascade');
+        });
+        
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('cliente');
-        Schema::dropIfExists('cliente_necessidade');
-        Schema::dropIfExists('necessidade');
-        Schema::dropIfExists('contato');
-        Schema::dropIfExists('usuario_cliente');
-        Schema::dropIfExists('prontuario');
-        Schema::dropIfExists('cliente_arquivo');
+        Schema::dropIfExists('sessoes');
+        Schema::dropIfExists('prontuario_arquivos');
         Schema::dropIfExists('arquivos');
+        Schema::dropIfExists('prontuarios');
+        Schema::dropIfExists('enderecos');
+        Schema::dropIfExists('contatos');
+        Schema::dropIfExists('cliente_necessidades');
+        Schema::dropIfExists('necessidades');
+        Schema::dropIfExists('clientes');
     }
 };

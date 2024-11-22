@@ -19,14 +19,14 @@
                 <x-slot name="content">
                     <div class="mx-4 bg-gray-100 sm:rounded-lg">
                         <ul class="p-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
-                            <li cl><strong>{{ __('Nome:') }}</strong> {{ $patient->name }}</li>
-                            <li><strong>{{ __('E-mail:') }}</strong> {{ $patient->email }}</li>
-                            <li><strong>{{ __('CPF:') }}</strong> {{ $patient->cpf }}</li>
-                            <li><strong>{{ __('RG:') }}</strong> {{ $patient->rg }}</li>
-                            <li><strong>{{ __('Telefone:') }}</strong> {{ $patient->phone }}</li>
-                            <li><strong>{{ __('Data de Nascimento:') }}</strong> {{ $patient->date_birth }}</li>
-                            <li><strong>{{ __('Escolaridade:') }}</strong> {{ ucfirst($patient->education) }}</li>
-                            <li><strong>{{ __('Gênero:') }}</strong> {{ ucfirst($patient->gender) }}</li>
+                            <li cl><strong>{{ __('Nome:') }}</strong> {{ $patient->cliente_nome }}</li>
+                            <li><strong>{{ __('E-mail:') }}</strong> {{ $patient->cliente_email }}</li>
+                            <li><strong>{{ __('CPF:') }}</strong> {{ $patient->cliente_cpf }}</li>
+                            <li><strong>{{ __('RG:') }}</strong> {{ $patient->cliente_rg }}</li>
+                            <li><strong>{{ __('Telefone:') }}</strong> {{ $patient->cliente_telefone }}</li>
+                            <li><strong>{{ __('Data de Nascimento:') }}</strong> {{ $patient->cliente_dt_nascimento }}</li>
+                            <li><strong>{{ __('Escolaridade:') }}</strong> {{ ucfirst($patient->cliente_escolaridade) }}</li>
+                            <li><strong>{{ __('Gênero:') }}</strong> {{ ucfirst($patient->cliente_genero) }}</li>
                         </ul>
                     </div>
                 </x-slot>
@@ -38,12 +38,12 @@
 <div class="pt-4">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg px-4 py-2">
-            <!-- Dropdown para Exibir os Dados do Paciente -->
+            <!-- Dropdown para Exibir os Dados de Prontuário -->
             <x-dropdown-list>
                 <x-slot name="trigger">
                     <button class="inline-flex items-center px-3 py-2 border border-transparent leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
                         <div class="w-full text-left text-gray-800 font-medium">
-                            {{ __('Dados do Paciente') }}
+                            {{ __('Dados de Prontuário') }}
                         </div>
                         <div class="ms-1">
                             <svg :class="{ 'rotate-180': open }" class="fill-current h-4 w-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -56,11 +56,10 @@
                 <x-slot name="content">
                     <div class="mx-4 bg-gray-100 sm:rounded-lg">
                         <ul class="p-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
-                            <li><strong>{{ __('Ultima Atualização:') }}</strong> {{ $medicalRecord->prontuario_dt_update }}</li>
-                            <li><strong>{{ __('Histórico Familiar:') }}</strong> {{ $medicalRecord->prontuario_tx_family_history }}</li>
+                            <li><strong>{{ __('Histórico Familiar:') }}</strong> {{ $medicalRecord->prontuario_tx_historico_familiar }}</li>
                             <li><strong>{{ __('Histórico Social:') }}</strong> {{ $medicalRecord->prontuario_tx_historico_social }}</li>
-                            <li><strong>{{ __('Considerações:') }}</strong> {{ $medicalRecord->prontuario_tx_considerations }}</li>
-                            <li><strong>{{ __('Observações:') }}</strong> {{ $medicalRecord->prontuario_tx_observation }}</li>
+                            <li><strong>{{ __('Considerações:') }}</strong> {{ $medicalRecord->prontuario_tx_consideracoes }}</li>
+                            <li><strong>{{ __('Observações:') }}</strong> {{ $medicalRecord->prontuario_tx_observacao }}</li>                            
                         </ul>
                     </div>
                 </x-slot>
@@ -72,44 +71,44 @@
 <div class="py-4">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-            <form method="POST" action="{{ route('medical-records.save', $medicalRecord->prontuario_id ?? null) }}">
+            <form method="POST" action="{{ route('sessao.save', $medicalRecord->prontuario_id ?? null) }}">
                 @csrf
-                @if(isset($medicalRecord->prontuario_id))
-                    @method('PUT')
-                @endif
-
-                <!-- Formulário de Preenchimento -->
+            
+                <!-- Campo Principal -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_principal" :value="__('Principal')" />
-                    <textarea id="sessao_tx_principal" name="sessao_tx_principal" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('sessao_tx_principal') }}</textarea>
+                    <textarea id="sessao_tx_principal" name="sessao_tx_principal" rows="8" 
+                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_principal') }}</textarea>
                 </div>
-
+            
+                <!-- Campo Procedimento -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_procedure" :value="__('Procedimento')" />
-                    <textarea id="sessao_tx_procedure" name="sessao_tx_procedure" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('sessao_tx_procedure') }}</textarea>
+                    <textarea id="sessao_tx_procedure" name="sessao_tx_procedure" rows="8" 
+                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_procedure') }}</textarea>
                 </div>
-
+            
+                <!-- Campo Encaminhamento -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_forwarding" :value="__('Encaminhamento')" />
-                    <textarea id="sessao_tx_forwarding" name="sessao_tx_forwarding" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('sessao_tx_forwarding') }}</textarea>
+                    <textarea id="sessao_tx_forwarding" name="sessao_tx_forwarding" rows="8" 
+                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_forwarding') }}</textarea>
                 </div>
-
+            
+                <!-- Campo Observações -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_observation" :value="__('Observações')" />
-                    <textarea id="sessao_tx_observation" name="sessao_tx_observation" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('sessao_tx_observation') }}</textarea>
+                    <textarea id="sessao_tx_observation" name="sessao_tx_observation" rows="8" 
+                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_observation') }}</textarea>
                 </div>
-
+            
                 <!-- Botão de Salvar -->
                 <div class="mt-8 flex justify-end">
                     <x-primary-button>
                         {{ __('Salvar Sessão') }}
                     </x-primary-button>
                 </div>
-            </form>
+            </form>            
         </div>
     </div>
 </div>
@@ -117,7 +116,7 @@
 <div class="py-4">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg px-4 py-2">
-            <!-- Dropdown para Exibir os Dados do Paciente -->
+            <!-- Dropdown para Exibir dados para subir arquivo -->
             <x-dropdown-list>
                 <x-slot name="trigger">
                     <button class="inline-flex items-center px-3 py-2 border border-transparent leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
@@ -134,12 +133,12 @@
 
                 <x-slot name="content">
                     <div class="px-6">
-                        <form action="{{ route('sessions.upload', ['idPatient' => $patient->id, 'idRecord' => $medicalRecord->prontuario_id]) }}" method="POST" enctype="multipart/form-data" id="uploadForm1">
+                        <form action="{{ route('records.upload', ['idPatient' => $patient->cliente_id, 'idRecord' => $medicalRecord->prontuario_id]) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             
-                            <!-- Input para Data da Sessão -->
+                            <!-- Input para Data -->
                             <div class="mb-4">
-                                <label for="session_date" class="block text-sm font-medium text-gray-700">{{ __('Data da Sessão') }}</label>
+                                <label for="session_date" class="block text-sm font-medium text-gray-700">{{ __('Data') }}</label>
                                 <input 
                                     type="date" 
                                     name="session_date" 
@@ -148,45 +147,28 @@
                                     required
                                 />
                             </div>
-                            
-                            <!-- Input para Hora Executada -->
-                            <div class="mb-4">
-                                <label for="session_time" class="block text-sm font-medium text-gray-700">{{ __('Hora Executada') }}</label>
-                                <input 
-                                    type="time" 
-                                    name="session_time" 
-                                    id="session_time" 
-                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
-                                    required
-                                />
-                            </div>
-                            
+                        
                             <!-- Input para Arquivo -->
                             <div class="mb-4">
-                                <label for="fileInput1" class="block text-sm font-medium text-gray-700">{{ __('Selecione um Arquivo') }}</label>
+                                <label for="file" class="block text-sm font-medium text-gray-700">{{ __('Selecione um Arquivo') }}</label>
                                 <input 
                                     type="file" 
-                                    name="files[]" 
-                                    id="fileInput1"
-                                    accept="image/*,application/pdf"
+                                    name="file" 
+                                    id="file"
+                                    accept="application/pdf"
                                     class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
-                                    multiple 
-                                    onchange="displaySelectedFiles(this)"
+                                    required 
                                 />
                             </div>
-                            
-                            <!-- Exibição de Arquivos Selecionados -->
-                            <div id="selectedFilesList" class="mt-2 text-sm text-gray-600">
-                                <!-- Arquivos selecionados serão exibidos aqui -->
-                            </div>
-    
-                            <!-- Botão para Submeter -->
+                        
+                            <!-- Botão de Submeter -->
                             <div class="mt-8 flex justify-end">
                                 <x-primary-button>
                                     {{ __('Subir Arquivo') }}
                                 </x-primary-button>
                             </div>
                         </form>
+                        
                     </div>
                 </x-slot>
             </x-dropdown-list>

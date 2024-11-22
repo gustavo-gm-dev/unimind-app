@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicalRecordController;
@@ -15,10 +16,7 @@ Route::get('/', function () {
 // Rotas protegidas por autenticação
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Pacientes
     Route::prefix('/pacientes')->group(function () {
@@ -38,6 +36,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::put('/medical-records/{id}/save', [MedicalRecordController::class, 'save'])->name('medical-records.save');
 
+        Route::post('/sessao/save/{medicalRecord}', [SessionController::class, 'save'])->name('sessao.save');
+
+        Route::get('/records/start/{idMedicalRecord}', [SessionController::class, 'start'])->name('sessions.create');
+
         // Rotas para Sessões
         Route::post('/{id}/sessions', [SessionController::class, 'store'])->name('sessions.store');
         Route::get('/sessions/{id}', [SessionController::class, 'show'])->name('sessions.show');
@@ -46,6 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/sessions/{id}', [SessionController::class, 'start'])->name('sessions.start');
         Route::get('/sessions/{id}/view/{file}', [SessionController::class, 'view'])->name('sessions.view');
         Route::post('/sessions/{idPatient}/upload/{idRecord}', [SessionController::class, 'upload'])->name('sessions.upload');
+
+        Route::post('/patients/{idPatient}/records/{idRecord}/upload', [MedicalRecordController::class, 'uploadFile'])->name('records.upload');
+        Route::get('/patients/{idPatient}/records/{idRecord}/file/{fileId}', [MedicalRecordController::class, 'viewFile'])->name('records.view');
     });
 
     // Configurações

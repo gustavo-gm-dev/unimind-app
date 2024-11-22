@@ -24,16 +24,16 @@
                 @foreach ($patients as $patient)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
-                            {{ $patient->name }}
+                            {{ $patient->cliente_nome }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                            {{ $patient->gender }}
+                            {{ $patient->cliente_genero == 'M' ? 'Masculino' : ($patient->cliente_genero == 'F' ? 'Feminino' : 'Outro') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                            {{ $patient->phone }}
+                            {{ $patient->cliente_telefone }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            @if ($patient->is_complete)
+                            @if ($patient->cliente_st_confirma_dados)
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
                                     {{ __('Sim') }}
                                 </span>
@@ -46,20 +46,20 @@
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
                             <!-- Botão para Editar Cadastro -->
                             <x-link-button>
-                                <a href="{{ route('patients.edit', $patient->id) }}">
+                                <a href="{{ route('patients.edit', $patient->cliente_id) }}">
                                     {{ __('Cadastro') }}
                                 </a>
                             </x-link-button>
                             <!-- Botão para Acessar Prontuário -->
                             <x-link-button>
-                                <a href="{{ route('medical-records.edit', $patient->id) }}">
+                                <a href="{{ route('medical-records.edit', $patient->cliente_id) }}">
                                     {{ __('Prontuário') }}
                                 </a>
                             </x-link-button>
                         </td>
                     </tr>
                 @endforeach
-            </tbody>
+            </tbody>            
         </table>
     </div>
 </div>
