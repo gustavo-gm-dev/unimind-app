@@ -46,14 +46,14 @@
                         @if ($session->situacao === 'PENDENTE')
                             <!-- Botão para Criar Sessão -->
                             <x-link-button>
-                                <a href="{{ route('sessions.create', $session->prontuario_id) }}">
+                                <a href="{{ route('session.edit', $session->id) }}">
                                     {{ __('Iniciar Sessão') }}
                                 </a>
                             </x-link-button>
                         @elseif ($session->situacao === 'INICIADA')
                             <!-- Botão para Editar Sessão -->
                             <x-link-button>
-                                <a href="{{ route('sessions.edit', $session->id) }}">
+                                <a href="{{ route('session.edit', $session->id) }}">
                                     {{ __('Editar Sessão') }}
                                 </a>
                             </x-link-button>

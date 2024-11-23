@@ -37,10 +37,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/patients/{idPatient}/records/{idRecord}/file/{fileId}', [MedicalRecordController::class, 'viewFile'])->name('records.view');
 
         //sessao
-        Route::get('/sessao/{id}', [SessionController::class, 'start'])->name('sessions.start');
-        Route::get('/sessao/start/{idMedicalRecord}', [SessionController::class, 'start'])->name('sessions.create');
-        Route::get('/sessions/edit/{id}', [SessionController::class, 'edit'])->name('sessions.edit');
-        Route::post('/sessao/save/{medicalRecord}', [SessionController::class, 'save'])->name('sessao.save');
+        Route::get('/sessoes', [SessionController::class, 'index'])->name('session.index');
+        Route::get('/sessao/create/{prontuario_id}', [SessionController::class, 'create'])->name('session.create');
+        Route::post('/sessao', [SessionController::class, 'store'])->name('session.store');
+        Route::get('/sessao/{sessao_id}', [SessionController::class, 'show'])->name('session.show');
+        Route::get('/sessao/{sessao_id}/edit', [SessionController::class, 'edit'])->name('session.edit');
+        Route::put('/sessao/{sessao_id}', [SessionController::class, 'update'])->name('session.update');
     });
 
     // Configurações

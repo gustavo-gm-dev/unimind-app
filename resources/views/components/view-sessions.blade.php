@@ -3,7 +3,6 @@
 
     <!-- Lista de Sessões (Esquerda) -->
     <div class="bg-gray-100 dark:bg-gray-800 rounded shadow p-4 max-h-96 overflow-y-auto">
-        <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">{{ __('Sessões') }}</h3>
         <ul>
             @foreach($sessions as $session)
                 <li>
@@ -44,13 +43,13 @@
                         <div class="mt-6 space-x-4">
                             @if ($session->sessao_st_confirmado === 'PENDENTE')
                                 <x-link-button>
-                                    <a href="{{ route('sessions.create', $medicalRecord->prontuario_id) }}">
+                                    <a href="{{ route('session.edit', $session->sessao_id) }}">
                                         {{ __('Iniciar Sessão') }}
                                     </a>
                                 </x-link-button>
                             @elseif ($session->sessao_st_confirmado === 'INICIADA')
                                 <x-link-button>
-                                    <a href="{{ route('sessions.edit', $session->sessao_id) }}">
+                                    <a href="{{ route('session.edit', $session->sessao_id) }}">
                                         {{ __('Editar Sessão') }}
                                     </a>
                                 </x-link-button>

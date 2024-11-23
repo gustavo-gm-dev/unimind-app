@@ -120,6 +120,13 @@
         <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
             <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">{{ __('Sessões') }}</h3>
             <x-view-sessions :sessions="$sessions" :medicalRecord="$medicalRecord"/>
+            <div class="mt-8 flex justify-end">
+                <x-link-button>
+                    <a href="{{ route('session.create', $medicalRecord->prontuario_id) }}">
+                        {{ __('Nova Sessão') }}
+                    </a>
+                </x-link-button>
+            </div>
         </div>
     </div>
 </div>

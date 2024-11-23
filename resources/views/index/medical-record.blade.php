@@ -6,16 +6,14 @@
     </x-slot>
 
     @if (session('success'))
-    <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
-        {{ session('success') }}
-    </div>
-@endif
+        <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
 
     @if (request()->routeIs('medical-records.edit') && isset($patient))
         @include('medical-records.edit', ['patient' => $patient, 'medicalRecord' => $medicalRecord, 'sessions' => $sessions])
-    @elseif (request()->routeIs('sessions.start') && isset($medicalRecord))
-        @include('medical-records.start', ['patient' => $patient, 'medicalRecord' => $medicalRecord])
     @else
         @include('medical-records.list', ['patients' => $patients])
     @endif
-    </x-app-layout>
+</x-app-layout>

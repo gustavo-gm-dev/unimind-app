@@ -71,47 +71,58 @@
 <div class="py-4">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-            <form method="POST" action="{{ route('sessao.save', $medicalRecord->prontuario_id ?? null) }}">
+            <form method="POST" action="{{ route('session.update', $session->sessao_id ?? null) }}">
                 @csrf
+                @method('PUT')
             
                 <!-- Campo Principal -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_principal" :value="__('Principal')" />
                     <textarea id="sessao_tx_principal" name="sessao_tx_principal" rows="8" 
-                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_principal') }}</textarea>
+                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_principal', $session->sessao_tx_principal ?? '') }}</textarea>
                 </div>
             
                 <!-- Campo Procedimento -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_procedure" :value="__('Procedimento')" />
                     <textarea id="sessao_tx_procedure" name="sessao_tx_procedure" rows="8" 
-                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_procedure') }}</textarea>
+                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_procedure', $session->sessao_tx_procedimento ?? '') }}</textarea>
                 </div>
             
                 <!-- Campo Encaminhamento -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_forwarding" :value="__('Encaminhamento')" />
                     <textarea id="sessao_tx_forwarding" name="sessao_tx_forwarding" rows="8" 
-                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_forwarding') }}</textarea>
+                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_forwarding', $session->sessao_tx_encaminhamento ?? '') }}</textarea>
                 </div>
             
                 <!-- Campo Observações -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_observation" :value="__('Observações')" />
                     <textarea id="sessao_tx_observation" name="sessao_tx_observation" rows="8" 
-                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_observation') }}</textarea>
+                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_observation', $session->sessao_tx_observacao ?? '') }}</textarea>
                 </div>
             
-                <!-- Botão de Salvar -->
-                <div class="mt-8 flex justify-end">
-                    <x-primary-button>
+                <!-- Botões -->
+                <div class="mt-8 flex justify-end space-x-4">
+                    <!-- Campo Oculto para Ação -->
+                    <input type="hidden" name="action" id="action" value="save">
+                    
+                    <!-- Botão Salvar Sessão -->
+                    <x-primary-button onclick="document.getElementById('action').value = 'save';">
                         {{ __('Salvar Sessão') }}
                     </x-primary-button>
+
+                    <!-- Botão Finalizar Sessão -->
+                    <x-primary-button onclick="document.getElementById('action').value = 'finalize';">
+                        {{ __('Finalizar Sessão') }}
+                    </x-primary-button>
                 </div>
-            </form>            
+            </form>     
         </div>
     </div>
 </div>
+
 
 <div class="py-4">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -168,7 +179,6 @@
                                 </x-primary-button>
                             </div>
                         </form>
-                        
                     </div>
                 </x-slot>
             </x-dropdown-list>
