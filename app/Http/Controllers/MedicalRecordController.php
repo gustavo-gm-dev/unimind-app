@@ -49,7 +49,7 @@ class MedicalRecordController extends Controller
         // Atualiza ou cria o prontuário
         $medicalRecord = $patient->prontuario()->updateOrCreate([], $validated);
 
-        return redirect()->route('medical_records.list')->with('success', 'Prontuário atualizado com sucesso!');
+        return redirect()->route('index.medical-record')->with('success', 'Prontuário atualizado com sucesso!');
     }
 
     public function uploadFile(Request $request, $idPatient, $idRecord)

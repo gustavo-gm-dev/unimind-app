@@ -15,6 +15,8 @@ class Prontuario extends Model
     // Nome da chave primária
     protected $primaryKey = 'prontuario_id';
 
+    protected $dates = ['created_at', 'updated_at'];
+
     // Tipos de dados que podem ser preenchidos em massa
     protected $fillable = [
         'prontuario_cliente_id',

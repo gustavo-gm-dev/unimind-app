@@ -50,14 +50,14 @@
                 <div class="flex items-center justify-between">
                     <!-- Informações do Prontuário -->
                     <div class="flex-1">
-                        <div class="mb-4">
+                        <div class="mb-2">
                             <p class="text-sm text-gray-600">
-                                <strong>{{ __('Data de Cadastro:') }}</strong> {{ $medicalRecord->prontuario_dt_register }}
+                                <strong>{{ __('Data de Cadastro:') }}</strong> {{ $medicalRecord->created_at->format('d/m/Y H:i:s') }}
                             </p>
                         </div>
                         <div class="mb-4">
                             <p class="text-sm text-gray-600">
-                                <strong>{{ __('Última Atualização:') }}</strong> {{ $medicalRecord->prontuario_dt_update }}
+                                <strong>{{ __('Última Atualização:') }}</strong> {{ $medicalRecord->updated_at->format('d/m/Y H:i:s') }}
                             </p>
                         </div>
                     </div>
@@ -118,54 +118,9 @@
 
 <div class="py-4">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-        <!-- Sessões -->
-        @if($sessions->isEmpty())
-            <!-- Botão para Iniciar Sessão -->
-            <button 
-                class="w-full text-center bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition ease-in-out duration-150"
-                onclick="window.location.href='{{ route('sessions.create', $medicalRecord->prontuario_id) }}'">
-                {{ __('Iniciar Sessão') }}
-            </button>
-        @else
-            <!-- Lista de Sessões -->
-            <div x-data="{ selectedSession: null }">
-                <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">{{ __('Sessões') }}</h3>
-                <ul class="mt-4 space-y-2">
-                    @foreach($sessions as $session)
-                        <li>
-                            <button 
-                                class="w-full text-left text-gray-800 dark:text-gray-200 py-2 px-4 border border-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-                                @click="selectedSession = {{ $session->sessao_id }}">
-                                {{ __('Sessão de:') }} {{ $session->sessao_dt_inicio  }}
-                            </button>
-                        </li>
-                    @endforeach
-                </ul>
-
-                <!-- Detalhes da Sessão Selecionada -->
-                <div x-show="selectedSession" class="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded shadow">
-                    <h4 class="text-md font-semibold text-gray-800 dark:text-gray-200">{{ __('Detalhes da Sessão') }}</h4>
-                    <template x-for="session in {{ $sessions }}">
-                        <div x-show="session.sessao_id == selectedSession">
-                            <p class="mt-2"><strong>{{ __('Data:') }}</strong> <span x-text="session.sessao_dt_inicio "></span></p>
-                            <p class="mt-2"><strong>{{ __('Principal:') }}</strong> <span x-text="session.sessao_tx_principal"></span></p>
-                            <p class="mt-2"><strong>{{ __('Procedimento:') }}</strong> <span x-text="session.sessao_tx_procedimento"></span></p>
-                            <p class="mt-2"><strong>{{ __('Encaminhamento:') }}</strong> <span x-text="session.sessao_tx_encaminhamento"></span></p>
-                            <p class="mt-2"><strong>{{ __('Observação:') }}</strong> <span x-text="session.sessao_tx_observacao"></span></p>
-                        </div>
-                    </template>
-                </div>
-            </div>
-
-            <div class="mt-8">
-                <button 
-                    class="w-full text-center bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition ease-in-out duration-150"
-                    onclick="window.location.href='{{ route('sessions.create', $medicalRecord->prontuario_id) }}'">
-                    {{ __('Iniciar Sessão') }}
-                </button>
-            </div>
-        @endif 
+        <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">{{ __('Sessões') }}</h3>
+            <x-view-sessions :sessions="$sessions" :medicalRecord="$medicalRecord"/>
         </div>
     </div>
 </div>
