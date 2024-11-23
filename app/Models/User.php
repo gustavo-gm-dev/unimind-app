@@ -45,4 +45,23 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    const ROLE_ADMIN = 'role_admin';
+    const ROLE_PROFESSOR = 'role_professor';
+    const ROLE_ALUNO= 'role_aluno';
+
+    public function isAdmin()
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function isProfessor()
+    {
+        return $this->role === self::ROLE_PROFESSOR;
+    }
+
+    public function isAluno()
+    {
+        return $this->role === self::ROLE_ALUNO;
+    }
 }

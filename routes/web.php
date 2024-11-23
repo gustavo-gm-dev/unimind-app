@@ -7,12 +7,15 @@ use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\SchedulingController;
+use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 
 // Página inicial
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::middleware(['role' => CheckRole::class]);
 
 // Rotas protegidas por autenticação
 Route::middleware(['auth', 'verified'])->group(function () {
