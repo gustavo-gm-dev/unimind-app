@@ -49,10 +49,8 @@
                             </td>
                 
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                <x-link-button>
-                                    <a href="{{ route('medical-records.edit', $patient->cliente_id) }}">
-                                        {{ __('Ver Prontuário') }}
-                                    </a>
+                                <x-link-button href="{{ route('medical-records.edit', $patient->cliente_id) }}">
+                                    {{ __('Ver Prontuário') }}
                                 </x-link-button>
                             </td>
                         </tr>

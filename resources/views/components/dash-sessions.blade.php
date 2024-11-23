@@ -45,24 +45,18 @@
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
                         @if ($session->situacao === 'PENDENTE')
                             <!-- Botão para Criar Sessão -->
-                            <x-link-button>
-                                <a href="{{ route('session.edit', $session->id) }}">
-                                    {{ __('Iniciar Sessão') }}
-                                </a>
+                            <x-link-button href="{{ route('session.edit', $session->id) }}">
+                                {{ __('Iniciar Sessão') }}
                             </x-link-button>
                         @elseif ($session->situacao === 'INICIADA')
                             <!-- Botão para Editar Sessão -->
-                            <x-link-button>
-                                <a href="{{ route('session.edit', $session->id) }}">
-                                    {{ __('Editar Sessão') }}
-                                </a>
+                            <x-link-button href="{{ route('session.edit', $session->id) }}">
+                                {{ __('Editar Sessão') }}
                             </x-link-button>
                         @elseif ($session->situacao === 'CONCLUIDA' && $session->ultimoArquivo)
                             <!-- Botão para Baixar Arquivo -->
-                            <x-link-button>
-                                <a href="{{ route('records.view', ['idPatient' => $session->cliente_id,'idRecord' => $session->prontuario_id, 'fileId' => $session->ultimoArquivo->id]) }}">
-                                    {{ __('Baixar Arquivo') }}
-                                </a>
+                            <x-link-button href="{{ route('records.view', ['idPatient' => $session->cliente_id,'idRecord' => $session->prontuario_id, 'fileId' => $session->ultimoArquivo->id]) }}">
+                                {{ __('Baixar Arquivo') }}
                             </x-link-button>
                         @endif
                     </td>

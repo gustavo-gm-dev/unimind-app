@@ -42,16 +42,12 @@
                         <!-- Botões para Ação -->
                         <div class="mt-6 space-x-4">
                             @if ($session->sessao_st_confirmado === 'PENDENTE')
-                                <x-link-button>
-                                    <a href="{{ route('session.edit', $session->sessao_id) }}">
-                                        {{ __('Iniciar Sessão') }}
-                                    </a>
+                                <x-link-button href="{{ route('session.edit', $session->sessao_id) }}">
+                                    {{ __('Iniciar Sessão') }}
                                 </x-link-button>
                             @elseif ($session->sessao_st_confirmado === 'INICIADA')
-                                <x-link-button>
-                                    <a href="{{ route('session.edit', $session->sessao_id) }}">
-                                        {{ __('Editar Sessão') }}
-                                    </a>
+                                <x-link-button href="{{ route('session.edit', $session->sessao_id) }}">
+                                    {{ __('Editar Sessão') }}
                                 </x-link-button>
                             @endif
                         </div>

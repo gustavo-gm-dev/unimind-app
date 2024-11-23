@@ -29,10 +29,8 @@
                             {{ $pacient->diagnosis ?? __('Não informado') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
-                            <x-link-button>
-                                <a href="{{ route('patients.edit', $pacient->id) }}">
-                                        {{ __('Editar') }}
-                                </a>
+                            <x-link-button href="{{ route('patients.edit', $pacient->id) }}">
+                                {{ __('Editar') }}
                             </x-link-button>
                         </td>
                     </tr>

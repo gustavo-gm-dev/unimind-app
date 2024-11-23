@@ -45,29 +45,21 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
                             <!-- Botão para Editar Cadastro -->
-                            <x-link-button>
-                                <a href="{{ route('patients.edit', $patient->cliente_id) }}">
-                                    {{ __('Editar Cadastro') }}
-                                </a>
+                            <x-link-button href="{{ route('patients.edit', $patient->cliente_id) }}">
+                                {{ __('Editar Cadastro') }}
                             </x-link-button>
                             <!-- Botão para Acessar Prontuário -->
-                            <x-link-button>
-                                <a href="{{ route('medical-records.edit', $patient->cliente_id) }}">
-                                    {{ __('Prontuário') }}
-                                </a>
+                            <x-link-button href="{{ route('medical-records.edit', $patient->cliente_id) }}">
+                                {{ __('Prontuário') }}
                             </x-link-button>
                                 <!-- Botão de Agendamento -->
                         @if ($patient->prontuario && $patient->prontuario->sessoes->last() && $patient->prontuario->sessoes->last()->sessao_dt_inicio >= now())
-                            <x-link-button>
-                                <a href="{{ route('scheduling.edit', $patient->cliente_id) }}">
-                                    {{ __('Alterar Agendamento') }}
-                                </a>
+                            <x-link-button href="{{ route('scheduling.edit', $patient->cliente_id) }}">
+                                {{ __('Alterar Agendamento') }}
                             </x-link-button>
                         @else
-                            <x-link-button>
-                                <a href="{{ route('scheduling.create', $patient->cliente_id) }}">
-                                    {{ __('Criar Agendamento') }}
-                                </a>
+                            <x-link-button href="{{ route('scheduling.create', $patient->cliente_id) }}">
+                                {{ __('Criar Agendamento') }}
                             </x-link-button>
                         @endif
                         </td>
