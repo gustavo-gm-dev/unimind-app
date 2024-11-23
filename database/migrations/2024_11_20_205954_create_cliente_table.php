@@ -101,7 +101,8 @@ return new class extends Migration
             $table->id('sessao_id');
             $table->unsignedBigInteger('sessao_prontuario_id'); // Chave estrangeira para prontuários
             $table->dateTime('sessao_dt_inicio');
-            $table->dateTime('sessao_dt_fim');
+            $table->dateTime('sessao_dt_fim')->nullable();
+            $table->string('sessao_periodo', 10);
             $table->text('sessao_tx_principal')->nullable();
             $table->text('sessao_tx_procedimento')->nullable();
             $table->text('sessao_tx_encaminhamento')->nullable();

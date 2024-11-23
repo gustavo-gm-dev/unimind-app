@@ -47,7 +47,7 @@
                             <!-- Botão para Editar Cadastro -->
                             <x-link-button>
                                 <a href="{{ route('patients.edit', $patient->cliente_id) }}">
-                                    {{ __('Cadastro') }}
+                                    {{ __('Editar Cadastro') }}
                                 </a>
                             </x-link-button>
                             <!-- Botão para Acessar Prontuário -->
@@ -56,6 +56,20 @@
                                     {{ __('Prontuário') }}
                                 </a>
                             </x-link-button>
+                                <!-- Botão de Agendamento -->
+                        @if ($patient->prontuario && $patient->prontuario->sessoes->last() && $patient->prontuario->sessoes->last()->sessao_dt_inicio >= now())
+                            <x-link-button>
+                                <a href="{{ route('scheduling.edit', $patient->cliente_id) }}">
+                                    {{ __('Alterar Agendamento') }}
+                                </a>
+                            </x-link-button>
+                        @else
+                            <x-link-button>
+                                <a href="{{ route('scheduling.create', $patient->cliente_id) }}">
+                                    {{ __('Criar Agendamento') }}
+                                </a>
+                            </x-link-button>
+                        @endif
                         </td>
                     </tr>
                 @endforeach

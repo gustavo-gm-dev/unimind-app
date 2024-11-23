@@ -17,6 +17,7 @@ class SessaoSeeder extends Seeder
                 'sessao_prontuario_id' => $prontuario->prontuario_id,
                 'sessao_dt_inicio' => now(),
                 'sessao_dt_fim' => now(),
+                'sessao_periodo' => 'manha',
                 'sessao_tx_principal' => 'Discussão inicial sobre objetivos da terapia.',
                 'sessao_tx_procedimento' => 'Identificação de áreas de melhoria social.',
                 'sessao_tx_encaminhamento' => 'Nenhum.',

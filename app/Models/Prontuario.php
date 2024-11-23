@@ -38,11 +38,11 @@ class Prontuario extends Model
 
     public function arquivos()
     {
-        return $this->hasMany(Arquivo::class, 'prontuario_id');
+        return $this->hasMany(Arquivo::class, 'arquivo_prontuario_id');
     }
 
     public function ultimoArquivo()
     {
-        return $this->hasOne(Arquivo::class, 'prontuario_id', 'prontuario_id')->orderBy('arquivo_dt_realizada', 'desc');
+        return $this->hasOne(Arquivo::class, 'arquivo_prontuario_id', 'prontuario_id')->orderBy('arquivo_dt_realizada', 'desc');
     }
 }

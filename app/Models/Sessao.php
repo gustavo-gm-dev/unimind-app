@@ -20,6 +20,7 @@ class Sessao extends Model
         'sessao_prontuario_id',
         'sessao_dt_inicio',
         'sessao_dt_fim',
+        'sessao_periodo',
         'sessao_tx_principal',
         'sessao_tx_procedimento',
         'sessao_tx_encaminhamento',

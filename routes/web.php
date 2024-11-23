@@ -6,6 +6,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\SchedulingController;
 use Illuminate\Support\Facades\Route;
 
 // Página inicial
@@ -50,6 +51,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+
+    //Agendamento
+    Route::prefix('scheduling')->group(function () {
+        Route::get('create/{id}', [SchedulingController::class, 'create'])->name('scheduling.create');
+        Route::post('store/{id}', [SchedulingController::class, 'store'])->name('scheduling.store');
+        Route::get('edit/{id}', [SchedulingController::class, 'edit'])->name('scheduling.edit');
+        Route::post('update/{id}', [SchedulingController::class, 'update'])->name('scheduling.update');
     });
 });
 
