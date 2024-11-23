@@ -83,8 +83,7 @@
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_historico_familiar" :value="__('Histórico Familiar')" />
                     <textarea id="prontuario_tx_historico_familiar" name="prontuario_tx_historico_familiar" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('prontuario_tx_historico_familiar', $medicalRecord->prontuario_tx_historico_familiar ?? '') }}
-                    </textarea>
+                        >{{ old('prontuario_tx_historico_familiar', $medicalRecord->prontuario_tx_historico_familiar ?? '') }}</textarea>
                 </div>
 
                 <div class="mb-4">
