@@ -22,7 +22,7 @@ class ClienteSeeder extends Seeder
                 'cliente_escolaridade' => 'Ensino Médio',
                 'cliente_periodo_preferencia' => 'M',
                 'cliente_st_confirma_dados' => true,
-                'cliente_tipo_atendimento' => 'Presencial',
+                'cliente_tipo_atendimento' => 'PRESENCIAL',
             ],
             [
                 'cliente_nome' => 'Maria Oliveira',
@@ -36,7 +36,7 @@ class ClienteSeeder extends Seeder
                 'cliente_escolaridade' => 'Ensino Superior',
                 'cliente_periodo_preferencia' => 'T',
                 'cliente_st_confirma_dados' => true,
-                'cliente_tipo_atendimento' => 'Remoto',
+                'cliente_tipo_atendimento' => 'REMOTO',
             ],
             [
                 'cliente_nome' => 'Carlos Andrade',
@@ -50,7 +50,7 @@ class ClienteSeeder extends Seeder
                 'cliente_escolaridade' => 'Pós-Graduação',
                 'cliente_periodo_preferencia' => 'N',
                 'cliente_st_confirma_dados' => true,
-                'cliente_tipo_atendimento' => 'Presencial',
+                'cliente_tipo_atendimento' => 'PRESENCIAL',
             ],
         ];
 

@@ -7,26 +7,13 @@
 
     <!-- Resumo Geral (Cards de Informações) -->
     <div class="pt-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <x-info-card title="Total de Pacientes" :value="$totalPatients" icon="users"/>
             <x-info-card title="Total de Prontuários" :value="$totalMedicalRecords" icon="clipboard"/>
             <x-info-card title="Sessões Agendadas" :value="$totalScheduledSessions" icon="calendar"/>
+            <x-info-card title="Sessões Realizadas" :value="$totalSessionsHeld" icon="calendarCheck"/>
         </div>
-    </div>
-
-    <!-- Lista de Pacientes Vinculados -->
-    <div class="pt-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
-                        {{ __('Pacientes Vinculados') }}
-                    </h3>
-                    <x-dash-client :pacients="$patients"/>
-                </div>
-            </div>
-        </div>
-    </div>
+    </div>    
 
     <!-- Lista de Sessões Agendadas -->
     <div class="pt-6">

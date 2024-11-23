@@ -32,10 +32,10 @@
                         <select id="gender" name="gender" class="block mt-1 w-full">
                             <option value="M" @if($patient->cliente_genero == 'M') selected @endif>Masculino</option>
                             <option value="F" @if($patient->cliente_genero == 'F') selected @endif>Feminino</option>
-                            <option value="Outro" @if($patient->cliente_genero == 'Outro') selected @endif>Outro</option>
+                            <option value="O" @if($patient->cliente_genero == 'O') selected @endif>Outro</option>
                         </select>
                     </div>
-
+                    
                     <!-- CPF -->
                     <div class="mt-4">
                         <x-input-label for="cpf" :value="__('CPF')" />
@@ -58,8 +58,15 @@
                     <div class="mt-4">
                         <x-input-label for="education" :value="__('Escolaridade')" />
                         <select id="education" name="education" class="block mt-1 w-full">
-                            <option value="fundamental" @if($patient->education == 'fundamental') selected @endif>Fundamental</option>
-                            <option value="superior" @if($patient->education == 'superior') selected @endif>Superior</option>
+                            <option value="" @if($patient->education == '') selected @endif>Não Informado</option>
+                            <option value="nenhuma" @if($patient->education == 'nenhuma') selected @endif>Sem Escolaridade</option>
+                            <option value="fundamental" @if($patient->education == 'fundamental') selected @endif>Ensino Fundamental</option>
+                            <option value="medio" @if($patient->education == 'medio') selected @endif>Ensino Médio</option>
+                            <option value="tecnico" @if($patient->education == 'tecnico') selected @endif>Técnico</option>
+                            <option value="superior" @if($patient->education == 'superior') selected @endif>Ensino Superior</option>
+                            <option value="posgraduacao" @if($patient->education == 'posgraduacao') selected @endif>Pós-Graduação</option>
+                            <option value="mestrado" @if($patient->education == 'mestrado') selected @endif>Mestrado</option>
+                            <option value="doutorado" @if($patient->education == 'doutorado') selected @endif>Doutorado</option>
                             <option value="outro" @if($patient->education == 'outro') selected @endif>Outro</option>
                         </select>
                     </div>
@@ -78,8 +85,8 @@
                     <div class="mt-4">
                         <x-input-label for="service" :value="__('Tipo de Atendimento')" />
                         <select id="service" name="service" class="block mt-1 w-full">
-                            <option value="presencial" @if($patient->service == 'presencial') selected @endif>Presencial</option>
-                            <option value="remoto" @if($patient->service == 'remoto') selected @endif>Remoto</option>
+                            <option value="PRESENCIAL" @if($patient->service == 'PRESENCIAL') selected @endif>Presencial</option>
+                            <option value="REMOTO" @if($patient->service == 'REMOTO') selected @endif>Remoto</option>
                         </select>
                     </div>
 

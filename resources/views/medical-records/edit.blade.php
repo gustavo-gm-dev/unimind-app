@@ -83,7 +83,7 @@
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_historico_familiar" :value="__('Histórico Familiar')" />
                     <textarea id="prontuario_tx_historico_familiar" name="prontuario_tx_historico_familiar" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('prontuario_tx_historico_familiar', $medicalRecord->prontuario_tx_family_history ?? '') }}
+                        >{{ old('prontuario_tx_historico_familiar', $medicalRecord->prontuario_tx_historico_familiar ?? '') }}
                     </textarea>
                 </div>
 
@@ -96,13 +96,13 @@
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_consideracoes" :value="__('Considerações')" />
                     <textarea id="prontuario_tx_consideracoes" name="prontuario_tx_consideracoes" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('prontuario_tx_consideracoes', $medicalRecord->prontuario_tx_considerations ?? '') }}</textarea>
+                        >{{ old('prontuario_tx_consideracoes', $medicalRecord->prontuario_tx_consideracoes ?? '') }}</textarea>
                 </div>
 
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_observacao" :value="__('Observações')" />
                     <textarea id="prontuario_tx_observacao" name="prontuario_tx_observacao" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('prontuario_tx_observacao', $medicalRecord->prontuario_tx_observation ?? '') }}</textarea>
+                        >{{ old('prontuario_tx_observacao', $medicalRecord->prontuario_tx_observacao ?? '') }}</textarea>
                 </div>
 
                 <!-- Botão de Salvar -->

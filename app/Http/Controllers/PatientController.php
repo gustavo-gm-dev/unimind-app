@@ -60,6 +60,7 @@ class PatientController extends Controller
             'cliente_dt_nascimento' => $validated['date_birth'],
             'cliente_escolaridade' => $validated['education'],
             'cliente_periodo_preferencia' => $validated['period'],
+            'cliente_tipo_atendimento' => $validated['service'],
             'cliente_st_confirma_dados' => true,
         ]);
 

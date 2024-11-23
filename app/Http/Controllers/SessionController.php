@@ -36,7 +36,7 @@ class SessionController extends Controller
 
         // Cria a nova sessão vinculada ao prontuário
         Sessao::create([
-            'prontuario_id' => $medicalRecord->prontuario_id,
+            'sessao_prontuario_id' => $medicalRecord->prontuario_id,
             'sessao_tx_principal' => $validatedData['sessao_tx_principal'],
             'sessao_tx_procedimento' => $validatedData['sessao_tx_procedure'],
             'sessao_tx_encaminhamento' => $validatedData['sessao_tx_forwarding'],
@@ -44,11 +44,12 @@ class SessionController extends Controller
             'sessao_dt_inicio' => now(),
             'sessao_dt_fim' => now(),
             'sessao_st_presenca' => true,
-            'sessao_st_confirmado' => false,
+            'sessao_st_confirmado' => 'CONCLUIDA',
         ]);
 
+        $patient = $medicalRecord->cliente;
+
         // Redireciona com mensagem de sucesso
-        return redirect()->route('sessions.create', $medicalRecord->prontuario_id)
-            ->with('success', 'Sessão salva com sucesso!');
+        return redirect()->route('index.medical-record')->with('success', 'Sessão salva com sucesso!');
     }
 }

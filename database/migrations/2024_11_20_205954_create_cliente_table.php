@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('cliente_genero', 1);
             $table->string('cliente_periodo_preferencia', 20);
             $table->boolean('cliente_st_confirma_dados')->default(false);
-            $table->enum('cliente_tipo_atendimento', ['Presencial', 'Remoto'])->default('Presencial');
+            $table->enum('cliente_tipo_atendimento', ['PRESENCIAL', 'REMOTO'])->default('PRESENCIAL');
             $table->timestamps();
         });
 
@@ -76,6 +76,7 @@ return new class extends Migration
             $table->text('prontuario_tx_historico_social');
             $table->text('prontuario_tx_consideracoes');
             $table->text('prontuario_tx_observacao');
+            
             $table->boolean('prontuario_st_validacao_prof')->default(false);
             $table->timestamps();
         
@@ -86,13 +87,13 @@ return new class extends Migration
 
         Schema::create('arquivos', function (Blueprint $table) {
             $table->id('arquivo_id');
-            $table->unsignedBigInteger('prontuario_id');
+            $table->unsignedBigInteger('arquivo_prontuario_id');
             $table->string('arquivo_url');
             $table->date('arquivo_dt_realizada');
             $table->timestamps(); 
         
             // Chave estrangeira para vincular ao prontuario
-            $table->foreign('prontuario_id')->references('prontuario_id')->on('prontuarios')->onDelete('cascade');
+            $table->foreign('arquivo_prontuario_id')->references('prontuario_id')->on('prontuarios')->onDelete('cascade');
         });
         
 
@@ -105,9 +106,9 @@ return new class extends Migration
             $table->text('sessao_tx_procedimento')->nullable();
             $table->text('sessao_tx_encaminhamento')->nullable();
             $table->text('sessao_tx_observacao')->nullable();
-            $table->enum('sessao_tipo_atendimento', ['Presencial', 'Remoto'])->default('Presencial');
+            $table->enum('sessao_tipo_atendimento', ['PRESENCIAL', 'REMOTO'])->default('PRESENCIAL');
             $table->boolean('sessao_st_presenca')->default(false);
-            $table->boolean('sessao_st_confirmado')->default(false);
+            $table->enum('sessao_st_confirmado', ['PENDENTE', 'INICIADA', 'CONCLUIDA'])->default('PENDENTE');
             $table->timestamps();
         
             // Definindo a chave estrangeira
