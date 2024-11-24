@@ -10,18 +10,21 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id('cliente_id');
+            $table->integer('cliente_usuario_id');
+            $table->integer('cliente_usuario_id_atualizado');
             $table->string('cliente_nome', 255);
             $table->string('cliente_cpf', 14);
-            $table->string('cliente_rg', 15);
             $table->string('cliente_email', 255);
-            $table->string('cliente_ddd', 2);
             $table->string('cliente_telefone', 15);
-            $table->date('cliente_dt_nascimento');
-            $table->string('cliente_escolaridade', 50);
-            $table->string('cliente_genero', 1);
-            $table->string('cliente_periodo_preferencia', 20);
-            $table->boolean('cliente_st_confirma_dados')->default(false);
+            $table->string('cliente_rg', 15)->nullable();
+            $table->string('cliente_ddd', 2)->nullable();
+            $table->date('cliente_dt_nascimento')->nullable();
+            $table->string('cliente_escolaridade', 50)->nullable();
+            $table->string('cliente_genero', 1)->nullable();
+            $table->string('cliente_periodo_preferencia', 20)->nullable();
             $table->enum('cliente_tipo_atendimento', ['PRESENCIAL', 'REMOTO'])->default('PRESENCIAL');
+            $table->boolean('cliente_st_confirma_dados')->default(false);
+            $table->boolean('cliente_st_cadastro')->default(false);
             $table->timestamps();
         });
 

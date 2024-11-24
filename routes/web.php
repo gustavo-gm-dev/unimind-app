@@ -28,6 +28,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dash/{id}', [PatientController::class, 'show'])->name('patients.show');
         Route::get('/{id}/edit', [PatientController::class, 'edit'])->name('patients.edit');
         Route::put('/{id}/update', [PatientController::class, 'update'])->name('patients.update');
+        Route::get('/create', [PatientController::class, 'create'])->name('patients.create');
+        Route::post('/store', [PatientController::class, 'store'])->name('patients.store');
     });
 
     // Prontuários

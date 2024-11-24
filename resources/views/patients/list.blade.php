@@ -1,3 +1,10 @@
+@if(Auth::user()->isAdmin() || Auth::user()->isProfessor())
+<div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
+    <x-link-button>
+        {{__('Novo Cliente')}}
+    </x-link-button>
+</div>
+@endif
 <div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
     <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -33,7 +40,7 @@
                             {{ $patient->cliente_telefone }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            @if ($patient->cliente_st_confirma_dados)
+                            @if ($patient->cliente_st_cadastro)
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
                                     {{ __('Sim') }}
                                 </span>

@@ -12,10 +12,16 @@
     @endif
     
     @if (request()->routeIs('patients.edit') && isset($patient))
-        <!-- Lista de Pacientes -->
-        @include('patients.edit', ['patient' => $patient])
-    @else
         <!-- Formulário de Edição -->
+        @include('patients.edit', ['patient' => $patient])
+
+    @elseif (request()->routeIs('patients.create'))
+        <!-- Formulário de Criação -->
+        @include('patients.create')
+
+    @else
+        <!-- Lista de Pacientes -->
         @include('patients.list', ['patients' => $patients])
+        
     @endif
 </x-app-layout>

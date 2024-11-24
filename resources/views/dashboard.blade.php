@@ -13,7 +13,19 @@
             <x-info-card title="Sessões Agendadas" :value="$totalScheduledSessions" icon="calendar"/>
             <x-info-card title="Sessões Realizadas" :value="$totalSessionsHeld" icon="calendarCheck"/>
         </div>
-    </div>    
+    </div>
+
+    @if(Auth::user()->isAdmin() || Auth::user()->isProfessor())
+    <div class="pt-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="w-full flex items-center justify-center sm:justify-start">
+                <x-link-button href="{{ route('patients.create') }}">
+                    {{ __('Novo Cliente') }}
+                </x-link-button>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <!-- Lista de Sessões Agendadas -->
     <div class="pt-6">

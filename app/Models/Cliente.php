@@ -17,6 +17,8 @@ class Cliente extends Model
 
     // Tipos de dados que podem ser preenchidos em massa
     protected $fillable = [
+        'cliente_usuario_id',
+        'cliente_usuario_id_atualizado',
         'cliente_nome',
         'cliente_cpf',
         'cliente_rg',
@@ -30,6 +32,7 @@ class Cliente extends Model
         'cliente_necessidade_id',
         'cliente_tipo_atendimento',
         'cliente_st_confirma_dados',
+        'cliente_st_cadastro',
     ];
 
     // Relacionamentos

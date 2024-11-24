@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Cliente; // Ou Pacient, se você renomeou o modelo
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
@@ -23,6 +25,50 @@ class PatientController extends Controller
 
         return view('index.patient', compact('patients'));
     }
+
+    public function create()
+    {
+        // Verifica se o usuário é 'role_professor' ou 'role_admin'
+        if (Auth::check() && (Auth::user()->role === 'role_professor' || Auth::user()->role === 'role_admin')) {
+            // Retorna a view se a validação passar
+            return view('index.patient');
+        }
+    
+        // Se a validação falhar, retorna um erro 403 ou redireciona para outra página
+        abort(403, 'Você não tem permissão para acessar esta página.');
+    }
+
+    public function store(Request $request)
+    {
+        // Verifica se o usuário é 'role_professor' ou 'role_admin'
+        if (Auth::check() && (Auth::user()->role === 'role_professor' || Auth::user()->role === 'role_admin')) {
+            // Validação dos dados enviados
+            $validatedData = $request->validate([
+                'cliente_nome' => 'required|string|max:255',
+                'cliente_cpf' => 'required|string|max:14',
+                'cliente_email' => 'required|email|max:255',
+                'cliente_telefone' => 'required|string|max:15',
+                'cliente_st_confirma_dados' => 'required|boolean',
+            ]);
+
+            // Define cliente_st_cadastro como false
+            $validatedData['cliente_st_cadastro'] = false;
+
+            // Adiciona o ID do usuário autenticado
+            $validatedData['cliente_usuario_id'] = Auth::user()->id;
+            $validatedData['cliente_usuario_id_atualizado'] = Auth::user()->id;
+        
+            // Criação do cliente
+            $cliente = Cliente::create($validatedData);
+        
+            // Retornar resposta
+            return redirect()->route('index.patient')->with('success', 'Paciente cadastrado com sucesso!');
+        }
+
+        // Se a validação falhar, retorna um erro 403 ou redireciona para outra página
+        abort(403, 'Você não tem permissão para acessar esta página.');
+    }
+    
 
     public function edit($id)
     {
@@ -65,5 +111,5 @@ class PatientController extends Controller
         ]);
 
         return redirect()->route('index.patient')->with('success', 'Paciente atualizado com sucesso!');
-    }
+    } 
 }

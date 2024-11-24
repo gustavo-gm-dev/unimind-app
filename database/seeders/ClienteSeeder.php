@@ -11,6 +11,8 @@ class ClienteSeeder extends Seeder
     {
         $clientes = [
             [
+                'cliente_usuario_id' => 1,
+                'cliente_usuario_id_atualizado' => 1,
                 'cliente_nome' => 'João da Silva',
                 'cliente_cpf' => '123.456.789-00',
                 'cliente_rg' => '12.345.678',
@@ -23,8 +25,11 @@ class ClienteSeeder extends Seeder
                 'cliente_periodo_preferencia' => 'M',
                 'cliente_st_confirma_dados' => true,
                 'cliente_tipo_atendimento' => 'PRESENCIAL',
+                'cliente_st_cadastro' => true,
             ],
             [
+                'cliente_usuario_id' => 1,
+                'cliente_usuario_id_atualizado' => 1,
                 'cliente_nome' => 'Maria Oliveira',
                 'cliente_cpf' => '987.654.321-00',
                 'cliente_rg' => '98.765.432',
@@ -37,8 +42,11 @@ class ClienteSeeder extends Seeder
                 'cliente_periodo_preferencia' => 'T',
                 'cliente_st_confirma_dados' => true,
                 'cliente_tipo_atendimento' => 'REMOTO',
+                'cliente_st_cadastro' => true,
             ],
             [
+                'cliente_usuario_id' => 1,
+                'cliente_usuario_id_atualizado' => 1,
                 'cliente_nome' => 'Carlos Andrade',
                 'cliente_cpf' => '654.321.987-00',
                 'cliente_rg' => '65.432.198',
@@ -51,6 +59,7 @@ class ClienteSeeder extends Seeder
                 'cliente_periodo_preferencia' => 'N',
                 'cliente_st_confirma_dados' => true,
                 'cliente_tipo_atendimento' => 'PRESENCIAL',
+                'cliente_st_cadastro' => true,
             ],
         ];
 
