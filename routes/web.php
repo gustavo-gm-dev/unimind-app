@@ -9,6 +9,7 @@ use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
+use Barryvdh\DomPDF\PDF;
 
 // Página inicial
 Route::get('/', function () {
@@ -67,6 +68,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('edit/{id}', [SchedulingController::class, 'edit'])->name('scheduling.edit');
         Route::post('update/{id}', [SchedulingController::class, 'update'])->name('scheduling.update');
     });
+
+    // Prontuários PDF
+    Route::get('/pdf', function(){
+
+        $pdf = PDF::loadView('welcome');
+        return $pdf->download('o.pdf');
+    });
+
 });
 
 // Rotas de autenticação
