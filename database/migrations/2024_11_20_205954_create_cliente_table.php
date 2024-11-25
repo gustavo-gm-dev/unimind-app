@@ -119,7 +119,23 @@ return new class extends Migration
             $table->foreign('sessao_prontuario_id')->references('prontuario_id')->on('prontuarios')->onDelete('cascade');
         });
         
+        Schema::create('vinculos', function (Blueprint $table) {
+            $table->id(); // ID do vínculo
+            $table->unsignedBigInteger('vinculo_usuario_id'); // ID do professor que criou o vínculo
+            $table->unsignedBigInteger('vinculo_aluno_id'); // ID do aluno vinculado
+            $table->unsignedBigInteger('vinculo_cliente_id'); // ID do cliente vinculado
+            $table->date('vinculo_data_inicio'); // Data de início do vínculo
+            $table->date('vinculo_data_fim'); // Data de término do vínculo
+            $table->timestamps();
+        
+            // Relacionamentos
+            $table->foreign('vinculo_usuario_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('vinculo_aluno_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('vinculo_cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
+        });
     }
+
+    
 
     public function down(): void
     {
@@ -132,5 +148,6 @@ return new class extends Migration
         Schema::dropIfExists('cliente_necessidades');
         Schema::dropIfExists('necessidades');
         Schema::dropIfExists('clientes');
+        Schema::dropIfExists('vinculos');
     }
 };

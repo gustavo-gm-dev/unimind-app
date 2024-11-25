@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\SessionController;
-use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
@@ -52,7 +52,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Configurações
-    Route::get('/configuracoes', [ConfigController::class, 'index'])->name('settings');
+    Route::prefix('/configuracao')->group(function () {
+        Route::get('/atrelar-aluno', [SettingController::class, 'index'])->name('setting.index');
+        Route::get('/atrelar-aluno/create', [SettingController::class, 'create'])->name('setting.create');
+        Route::post('/atrelar-aluno', [SettingController::class, 'store'])->name('setting.store');
+        Route::get('/atrelar-aluno/{vinculo_cliente_id}', [SettingController::class, 'show'])->name('setting.show');
+        Route::get('/atrelar-aluno/{vinculo_cliente_id}/edit', [SettingController::class, 'edit'])->name('setting.edit');
+        Route::put('/atrelar-aluno/{vinculo_aluno_id}/{vinculo_cliente_id}', [SettingController::class, 'update'])->name('setting.update');
+        Route::post('/atrelar-aluno/buscar', [SettingController::class, 'find'])->name('setting.find');
+
+
+// Rota para salvar os vínculos
+Route::post('/vinculos', [VinculoController::class, 'salvar'])->name('vinculos.salvar');
+    });
 
     // Perfil do usuário
     Route::prefix('profile')->group(function () {

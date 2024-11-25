@@ -21,7 +21,7 @@
                     <x-nav-link :href="route('index.medical-record')" :active="request()->routeIs('index.medical-record')">
                         {{ __('Prontuários') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('settings')" :active="request()->routeIs('settings')">
+                    <x-nav-link :href="route('setting.index')" :active="request()->routeIs('setting.index')">
                         {{ __('Configurações') }}
                     </x-nav-link>
                 </div>
@@ -51,7 +51,7 @@
                         <x-dropdown-link :href="route('index.medical-record')">
                             {{ __('Prontuários') }}
                         </x-dropdown-link>
-                        <x-dropdown-link :href="route('settings')">
+                        <x-dropdown-link :href="route('setting.index')">
                             {{ __('Configurações') }}
                         </x-dropdown-link>
 
@@ -92,7 +92,7 @@
             <x-responsive-nav-link :href="route('index.medical-record')" :active="request()->routeIs('index.medical-record')">
                 {{ __('Prontuários') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('settings')" :active="request()->routeIs('settings')">
+            <x-responsive-nav-link :href="route('setting.index')" :active="request()->routeIs('setting.index')">
                 {{ __('Configurações') }}
             </x-responsive-nav-link>
         </div>
