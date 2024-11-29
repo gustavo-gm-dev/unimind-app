@@ -13,10 +13,10 @@ return new class extends Migration
             $table->integer('cliente_usuario_id');
             $table->integer('cliente_usuario_id_atualizado');
             $table->string('cliente_nome', 255);
-            $table->string('cliente_cpf', 14);
-            $table->string('cliente_email', 255);
-            $table->string('cliente_telefone', 15);
-            $table->string('cliente_rg', 15)->nullable();
+            $table->string('cliente_cpf', 14)->nullable()->unique();
+            $table->string('cliente_rg', 15)->nullable()->unique();
+            $table->string('cliente_email', 255)->unique();
+            $table->string('cliente_telefone', 15)->unique();
             $table->string('cliente_ddd', 2)->nullable();
             $table->date('cliente_dt_nascimento')->nullable();
             $table->string('cliente_escolaridade', 50)->nullable();
@@ -27,6 +27,13 @@ return new class extends Migration
             $table->boolean('cliente_st_cadastro')->default(false);
             $table->timestamps();
         });
+
+        // Adicionando a restrição de check
+        DB::statement('
+            ALTER TABLE clientes 
+            ADD CONSTRAINT check_cpf_or_rg 
+            CHECK (cliente_cpf IS NOT NULL OR cliente_rg IS NOT NULL)
+        ');
 
         Schema::create('necessidades', function (Blueprint $table) {
             $table->id('necessidade_id');
@@ -121,15 +128,11 @@ return new class extends Migration
         
         Schema::create('vinculos', function (Blueprint $table) {
             $table->id(); // ID do vínculo
-            $table->unsignedBigInteger('vinculo_usuario_id'); // ID do professor que criou o vínculo
             $table->unsignedBigInteger('vinculo_aluno_id'); // ID do aluno vinculado
             $table->unsignedBigInteger('vinculo_cliente_id'); // ID do cliente vinculado
-            $table->date('vinculo_data_inicio'); // Data de início do vínculo
-            $table->date('vinculo_data_fim'); // Data de término do vínculo
             $table->timestamps();
         
             // Relacionamentos
-            $table->foreign('vinculo_usuario_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('vinculo_aluno_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('vinculo_cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
         });

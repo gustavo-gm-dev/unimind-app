@@ -14,11 +14,8 @@ class Vinculo extends Model
 
     // Tipos de dados que podem ser preenchidos em massa
     protected $fillable = [
-        'vinculo_usuario_id', // ID do professor que criou o vínculo
-        'vinculo_aluno_id',   // ID do aluno vinculado
-        'vinculo_cliente_id', // ID do cliente vinculado
-        'vinculo_data_inicio',
-        'vinculo_data_fim',
+        'vinculo_aluno_id',
+        'vinculo_cliente_id',
     ];
 
     /**

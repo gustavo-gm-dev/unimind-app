@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    @if(Auth::user()->isAdmin() || Auth::user()->isProfessor())
+    <!-- Cadastrar novo cliente -->
     <div class="pt-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="w-full flex items-center justify-center sm:justify-start">
@@ -25,7 +25,6 @@
             </div>
         </div>
     </div>
-    @endif
 
     <!-- Lista de Sessões Agendadas -->
     <div class="pt-6">
