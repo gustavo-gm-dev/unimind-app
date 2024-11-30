@@ -21,9 +21,11 @@
                     <x-nav-link :href="route('index.medical-record')" :active="request()->routeIs('index.medical-record')">
                         {{ __('Prontuários') }}
                     </x-nav-link>
+                    @if(Auth::user()->isAdmin() || Auth::user()->isProfessor())
                     <x-nav-link :href="route('setting.index')" :active="request()->routeIs('setting.index')">
                         {{ __('Configurações') }}
                     </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -51,9 +53,11 @@
                         <x-dropdown-link :href="route('index.medical-record')">
                             {{ __('Prontuários') }}
                         </x-dropdown-link>
+                        @if(Auth::user()->isAdmin() || Auth::user()->isProfessor())
                         <x-dropdown-link :href="route('setting.index')">
                             {{ __('Configurações') }}
                         </x-dropdown-link>
+                        @endif
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -92,9 +96,11 @@
             <x-responsive-nav-link :href="route('index.medical-record')" :active="request()->routeIs('index.medical-record')">
                 {{ __('Prontuários') }}
             </x-responsive-nav-link>
+            @if(Auth::user()->isAdmin() || Auth::user()->isProfessor())
             <x-responsive-nav-link :href="route('setting.index')" :active="request()->routeIs('setting.index')">
                 {{ __('Configurações') }}
             </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

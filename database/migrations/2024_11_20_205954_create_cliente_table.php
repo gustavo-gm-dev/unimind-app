@@ -53,7 +53,7 @@ return new class extends Migration
 
         Schema::create('contatos', function (Blueprint $table) {
             $table->id('contato_id');
-            $table->unsignedBigInteger('cliente_id');
+            $table->unsignedBigInteger('contato_cliente_id');
             $table->string('contato_nome', 150);
             $table->string('contato_telefone', 150);
             $table->string('contato_situacao', 1);
@@ -65,7 +65,7 @@ return new class extends Migration
 
         Schema::create('enderecos', function (Blueprint $table) {
             $table->id('endereco_id');
-            $table->unsignedBigInteger('cliente_id');
+            $table->unsignedBigInteger('endereco_cliente_id');
             $table->string('endereco_logradouro', 255);
             $table->integer('endereco_numero');
             $table->string('endereco_complemento', 255)->nullable();

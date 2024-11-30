@@ -36,6 +36,11 @@ class Cliente extends Model
     ];
 
     // Relacionamentos
+    public function endereco()
+    {
+        return $this->hasMany(Endereco::class, 'endereco_cliente_id', 'cliente_id');
+    }
+
 
     public function prontuario()
     {
@@ -52,5 +57,27 @@ class Cliente extends Model
             'cliente_id',            // Chave local em Cliente
             'prontuario_id'          // Chave local em Prontuario
         );
+    }
+
+    /**
+     * Scope para filtrar clientes vinculados ao aluno autenticado
+     */
+    public function scopeByAluno($query, $user)
+    {
+        if ($user->isAluno()) {
+            return $query->whereHas('vinculos', function ($q) use ($user) {
+                $q->where('vinculo_aluno_id', $user->id);
+            });
+        }
+
+        return $query; // Sem restrição se não for aluno
+    }
+
+    /**
+     * Relacionamento com vínculos
+     */
+    public function vinculos()
+    {
+        return $this->hasMany(Vinculo::class, 'vinculo_cliente_id', 'cliente_id');
     }
 }

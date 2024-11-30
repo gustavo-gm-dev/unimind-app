@@ -100,6 +100,56 @@
                         </select>
                     </div>
 
+                    <!--Cadastro de enderecos -->
+
+                    <div class="mt-4">
+                        <span class="text-lg font-medium text-gray-800 dark:text-gray-200">{{ __('Cadastro de Endereço') }}</span>
+                    </div>
+
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Logradouro -->
+                        <div>
+                            <x-input-label for="endereco_logradouro" :value="__('Logradouro')" />
+                            <x-text-input id="endereco_logradouro" class="block mt-1 w-full" type="text" name="endereco_logradouro" :value="old('endereco_logradouro')" />
+                        </div>
+                    
+                        <!-- Número -->
+                        <div>
+                            <x-input-label for="endereco_numero" :value="__('Número')" />
+                            <x-text-input id="endereco_numero" class="block mt-1 w-24" type="text" name="endereco_numero" :value="old('endereco_numero')" />
+                        </div>
+
+                        <!-- Estado -->
+                        <div>
+                            <x-input-label for="endereco_uf" :value="__('Estado')" />
+                            <x-list-country/>
+                        </div>
+                    
+                        <!-- Cidade -->
+                        <div>
+                            <x-input-label for="endereco_cidade" :value="__('Cidade')" />
+                            <x-text-input id="endereco_cidade" class="block mt-1 w-full" type="text" name="endereco_cidade" :value="old('endereco_cidade')" />
+                        </div>
+
+                        <!-- Bairro -->
+                        <div>
+                            <x-input-label for="endereco_bairro" :value="__('Bairro')" />
+                            <x-text-input id="endereco_bairro" class="block mt-1 w-full" type="text" name="endereco_bairro" :value="old('endereco_bairro')" />
+                        </div>
+
+                        <!-- CEP -->
+                        <div>
+                            <x-input-label for="endereco_cep" :value="__('CEP')" />
+                            <x-text-input id="endereco_cep" class="block mt-1 w-full" type="text" name="endereco_cep" :value="old('endereco_cep')" />
+                        </div>
+
+                        <!-- Complemento -->
+                        <div>
+                            <x-input-label for="endereco_complemento" :value="__('Complemento')" />
+                            <x-text-input id="endereco_complemento" class="block mt-1 w-full" type="text" name="endereco_complemento" :value="old('endereco_complemento')" />
+                        </div>
+                    </div>                    
+
                     <!-- Termos -->
                     <div class="mt-6">
                         <label for="cliente_st_confirma_dados" class="flex items-center">

@@ -4,13 +4,13 @@
             {{ __('Configuração') }}
         </h2>
     </x-slot>
+    @if(Auth::user()->isAdmin() || Auth::user()->isProfessor())
+        @if (session('success'))
+            <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    @if (session('success'))
-        <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
-            {{ session('success') }}
-        </div>
+        @include('settings.index')
     @endif
-
-    @include('settings.index')
-
 </x-app-layout>

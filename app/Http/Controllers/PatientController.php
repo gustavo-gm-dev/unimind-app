@@ -10,33 +10,88 @@ use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
-    public function show($id)
-    {
-        // Busca o paciente pelo ID
-        $pacient = Cliente::findOrFail($id);
-
-        // Retorna a view com os detalhes do paciente
-        return view('pacients.show', compact('pacient'));
-    }
-
     public function index()
     {
-        // Recupera todos os pacientes
-        $patients = Cliente::all();
+        $user = Auth::user(); // Usuário autenticado
+
+        // Recupera os pacientes vinculados ao aluno autenticado
+        $patients = Cliente::whereHas('vinculos', function ($query) use ($user) {
+            $query->where('vinculo_aluno_id', $user->id);
+        })->with('prontuario')->get();
 
         return view('index.patient', compact('patients'));
     }
 
-    public function create()
+    public function show($id)
     {
-        // Retorna a view se a validação passar
-        return view('index.patient');
+        $user = Auth::user(); // Usuário autenticado
 
+        // Busca o paciente pelo ID e garante que o aluno tem acesso
+        $pacient = Cliente::whereHas('vinculos', function ($query) use ($user) {
+            $query->where('vinculo_aluno_id', $user->id);
+        })->with('prontuario')->findOrFail($id);
+
+        return view('pacients.show', compact('pacient'));
+    }
+
+    public function edit($id)
+    {
+        $user = Auth::user(); // Usuário autenticado
+
+        // Busca o paciente pelo ID e garante que o aluno tem acesso
+        $patient = Cliente::whereHas('vinculos', function ($query) use ($user) {
+            $query->where('vinculo_aluno_id', $user->id);
+        })->findOrFail($id);
+
+        return view('index.patient', compact('patient'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = Auth::user(); // Usuário autenticado
+
+        // Valida se o paciente está vinculado ao aluno
+        $patient = Cliente::whereHas('vinculos', function ($query) use ($user) {
+            $query->where('vinculo_aluno_id', $user->id);
+        })->findOrFail($id);
+
+        // Validação dos dados
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15',
+            'gender' => 'required|string|max:15',
+            'cpf' => 'required|string|max:14',
+            'date_birth' => 'required|date',
+            'education' => 'required|string|max:50',
+            'period' => 'required|string|max:20',
+            'service' => 'required|string|max:20',
+        ]);
+
+        // Atualiza o paciente
+        $patient->update([
+            'cliente_nome' => $validated['name'],
+            'cliente_email' => $validated['email'],
+            'cliente_telefone' => $validated['phone'],
+            'cliente_genero' => $validated['gender'],
+            'cliente_cpf' => $validated['cpf'],
+            'cliente_rg' => $validated['rg'],
+            'cliente_dt_nascimento' => $validated['date_birth'],
+            'cliente_escolaridade' => $validated['education'],
+            'cliente_periodo_preferencia' => $validated['period'],
+            'cliente_tipo_atendimento' => $validated['service'],
+            'cliente_st_confirma_dados' => true,
+        ]);
+
+        return redirect()->route('index.patient')->with('success', 'Paciente atualizado com sucesso!');
     }
 
     public function store(Request $request)
     {
+        $user = Auth::user(); // Usuário autenticado
+
         $validatedData = $request->validate([
+            // Dados do cliente
             'cliente_nome' => 'required|string|max:255',
             'cliente_cpf' => 'nullable|string|max:14',
             'cliente_rg' => 'nullable|string|max:15',
@@ -48,49 +103,55 @@ class PatientController extends Controller
             'cliente_periodo_preferencia' => 'nullable|string|max:20',
             'cliente_tipo_atendimento' => 'nullable|string|max:20',
             'cliente_st_confirma_dados' => 'nullable|boolean',
+            // Dados do endereço
+            'endereco_logradouro' => 'nullable|string|max:255',
+            'endereco_numero' => 'nullable|string|max:50',
+            'endereco_complemento' => 'nullable|string|max:255',
+            'endereco_bairro' => 'nullable|string|max:255',
+            'endereco_cidade' => 'nullable|string|max:255',
+            'endereco_uf' => 'nullable|string|max:2',
+            'endereco_cep' => 'nullable|string|max:15',
+            'endereco_pais' => 'nullable|string|max:255',
         ]);
 
-        // Verifica se pelo menos CPF ou RG está preenchido
         if (empty($validatedData['cliente_cpf']) && empty($validatedData['cliente_rg'])) {
             return redirect()->back()
                 ->withErrors(['cpf_rg' => 'Pelo menos o CPF ou RG devem ser preenchidos.'])
-                ->withInput(); // Retorna os dados preenchidos anteriormente ao formulário
-        }
-
-        // Verificar duplicidade de cliente
-        $existingCliente = Cliente::where(function ($query) use ($validatedData) {
-            $query->where('cliente_cpf', $validatedData['cliente_cpf'])
-                ->orWhere('cliente_rg', $validatedData['cliente_rg'])
-                ->orWhere('cliente_email', $validatedData['cliente_email'])
-                ->orWhere('cliente_telefone', $validatedData['cliente_telefone']);
-        })->first();
-
-        if ($existingCliente) {
-            return redirect()->back()
-                ->withErrors([
-                    'cliente_duplicado' => 'Já existe um cliente com esses dados. Entre em contato com o professor responsável para mais informações.',
-                ])
                 ->withInput();
         }
 
-        // Define cliente_st_cadastro com base na verificação de todos os campos
-        $validatedData['cliente_st_cadastro'] = $this->isCadastroCompleto($validatedData);
+        $validatedData['cliente_usuario_id'] = $user->id;
+        $validatedData['cliente_usuario_id_atualizado'] = $user->id;
 
-        // Adiciona o ID do usuário autenticado
-        $validatedData['cliente_usuario_id'] = Auth::user()->id;
-        $validatedData['cliente_usuario_id_atualizado'] = Auth::user()->id;
-    
-        // Criação do cliente
         $cliente = Cliente::create($validatedData);
 
-        // Criar vínculo entre cliente e usuário
+        // Criar o endereço relacionado ao cliente
+        $cliente->endereco()->create([
+            'endereco_cliente_id' => $cliente->cliente_id,
+            'endereco_logradouro' => $validatedData['endereco_logradouro'],
+            'endereco_numero' => $validatedData['endereco_numero'],
+            'endereco_complemento' => $validatedData['endereco_complemento'],
+            'endereco_bairro' => $validatedData['endereco_bairro'],
+            'endereco_cidade' => $validatedData['endereco_cidade'],
+            'endereco_uf' => $validatedData['endereco_uf'],
+            'endereco_cep' => $validatedData['endereco_cep'],
+            'endereco_pais' => $validatedData['endereco_pais'],
+        ]);
+
         Vinculo::create([
-            'vinculo_aluno_id' => Auth::user()->id,
+            'vinculo_aluno_id' => $user->id,
             'vinculo_cliente_id' => $cliente->cliente_id,
         ]);
-    
-        // Retornar resposta
+        
+
         return redirect()->route('index.patient')->with('success', 'Paciente cadastrado com sucesso!');
+    }
+
+    public function create()
+    {
+        // Retorna a view se a validação passar
+        return view('index.patient');
+
     }
     
     /**
@@ -120,46 +181,4 @@ class PatientController extends Controller
 
         return true;
     }
-
-    public function edit($id)
-    {
-        // Recupera o paciente pelo ID
-        $patient = Cliente::findOrFail($id);
-
-        return view('index.patient', compact('patient'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        // Validação dos dados
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:15',
-            'gender' => 'required|string|max:15',
-            'cpf' => 'required|string|max:14',
-            'date_birth' => 'required|date',
-            'education' => 'required|string|max:50',
-            'period' => 'required|string|max:20',
-            'service' => 'required|string|max:20',
-        ]);
-
-        // Atualiza o paciente
-        $patient = Cliente::findOrFail($id);
-        $patient->update([
-            'cliente_nome' => $validated['name'],
-            'cliente_email' => $validated['email'],
-            'cliente_telefone' => $validated['phone'],
-            'cliente_genero' => $validated['gender'],
-            'cliente_cpf' => $validated['cpf'],
-            'cliente_rg' => $validated['rg'],
-            'cliente_dt_nascimento' => $validated['date_birth'],
-            'cliente_escolaridade' => $validated['education'],
-            'cliente_periodo_preferencia' => $validated['period'],
-            'cliente_tipo_atendimento' => $validated['service'],
-            'cliente_st_confirma_dados' => true,
-        ]);
-
-        return redirect()->route('index.patient')->with('success', 'Paciente atualizado com sucesso!');
-    } 
 }

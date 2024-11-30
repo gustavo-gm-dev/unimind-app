@@ -34,7 +34,7 @@
                     <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
                         {{ __('Sessões Agendadas') }}
                     </h3>
-                    <x-dash-sessions :sessions="$sessions"/>
+                    <x-dash-sessions :sessions="$futureSessions"/>
                 </div>
             </div>
         </div>

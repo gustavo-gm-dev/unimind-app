@@ -19,14 +19,6 @@ class Vinculo extends Model
     ];
 
     /**
-     * Relacionamento com o modelo User (professor)
-     */
-    public function professor()
-    {
-        return $this->belongsTo(User::class, 'vinculo_usuario_id', 'id');
-    }
-
-    /**
      * Relacionamento com o modelo User (aluno)
      */
     public function aluno()
@@ -40,20 +32,6 @@ class Vinculo extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'vinculo_cliente_id', 'cliente_id');
-    }
-
-    /**
-     * Verifica se o vínculo está ativo com base na data atual
-     *
-     * @return bool
-     */
-    public function isAtivo()
-    {
-        $hoje = now()->toDateString(); // Apenas a data atual
-        $dataInicio = $this->vinculo_data_inicio->toDateString();
-        $dataFim = $this->vinculo_data_fim->toDateString();
-
-        return $dataInicio <= $hoje && $dataFim >= $hoje;
     }
 
 }
