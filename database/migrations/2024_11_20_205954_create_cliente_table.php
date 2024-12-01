@@ -81,10 +81,11 @@ return new class extends Migration
         Schema::create('prontuarios', function (Blueprint $table) {
             $table->id('prontuario_id');
             $table->unsignedBigInteger('prontuario_cliente_id'); // Chave estrangeira para cliente
-            $table->text('prontuario_tx_historico_familiar');
-            $table->text('prontuario_tx_historico_social');
-            $table->text('prontuario_tx_consideracoes');
-            $table->text('prontuario_tx_observacao');
+            $table->integer('prontuario_usuario_id_atualizado');
+            $table->text('prontuario_tx_historico_familiar')->nullable();
+            $table->text('prontuario_tx_historico_social')->nullable();
+            $table->text('prontuario_tx_consideracoes')->nullable();
+            $table->text('prontuario_tx_observacao')->nullable();
             
             $table->boolean('prontuario_st_validacao_prof')->default(false);
             $table->timestamps();

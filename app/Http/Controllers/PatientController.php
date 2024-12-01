@@ -13,14 +13,13 @@ class PatientController extends Controller
     public function index()
     {
         $user = Auth::user(); // Usuário autenticado
-
-        // Recupera os pacientes vinculados ao aluno autenticado
-        $patients = Cliente::whereHas('vinculo', function ($query) use ($user) {
-            $query->where('vinculo_aluno_id', $user->id);
-        })->with('prontuario')->get();
-
+    
+        // Recupera os pacientes acessíveis ao usuário
+        $patients = Cliente::accessibleByUser($user)->get();
+    
         return view('index.patient', compact('patients'));
     }
+    
 
     public function show($id)
     {
@@ -176,7 +175,6 @@ class PatientController extends Controller
     {
         // Retorna a view se a validação passar
         return view('index.patient');
-
     }
     
 

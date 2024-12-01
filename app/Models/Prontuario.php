@@ -20,6 +20,7 @@ class Prontuario extends Model
     // Tipos de dados que podem ser preenchidos em massa
     protected $fillable = [
         'prontuario_cliente_id',
+        'prontuario_usuario_id_atualizado',
         'prontuario_tx_historico_familiar',
         'prontuario_tx_historico_social',
         'prontuario_tx_consideracoes',

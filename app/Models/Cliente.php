@@ -80,6 +80,27 @@ class Cliente extends Model
         return $this->hasOne(Vinculo::class, 'vinculo_cliente_id', 'cliente_id');
     }
 
+    public function scopeAccessibleByUser($query, $user)
+    {
+        if ($user->role === 'role_professor') {
+            // Se for professor, busca pacientes vinculados aos alunos sob sua orientação
+            return $query->whereHas('vinculo', function ($vinculoQuery) use ($user) {
+                $vinculoQuery->whereHas('aluno', function ($alunoQuery) use ($user) {
+                    $alunoQuery->where('professor_id', $user->id);
+                });
+            });
+        } elseif ($user->role === 'role_aluno') {
+            // Se for aluno, busca apenas os pacientes diretamente vinculados
+            return $query->whereHas('vinculo', function ($vinculoQuery) use ($user) {
+                $vinculoQuery->where('vinculo_aluno_id', $user->id);
+            });
+        }
+
+        // Para outros papéis, retornar vazio ou outro comportamento
+        return $query->whereRaw('0 = 1');
+    }
+
+
     /**
      * Verifica se todos os dados obrigatórios estão preenchidos para marcar o cadastro como completo.
      *

@@ -37,14 +37,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('prontuarios')->group(function () {
         Route::get('/', [MedicalRecordController::class, 'index'])->name('index.medical-record');
         Route::get('/{id}/edit', [MedicalRecordController::class, 'edit'])->name('medical-records.edit');
-        Route::put('/medical-records/{id}/save', [MedicalRecordController::class, 'save'])->name('medical-records.save');
+        Route::put('/medical-records/{clinete_id}/save', [MedicalRecordController::class, 'save'])->name('medical-records.save');
         //arquivo
         Route::post('/patients/{idPatient}/records/{idRecord}/upload', [MedicalRecordController::class, 'uploadFile'])->name('records.upload');
         Route::get('/patients/{idPatient}/records/{idRecord}/file/{fileId}', [MedicalRecordController::class, 'viewFile'])->name('records.view');
 
         //sessao
         Route::get('/sessoes', [SessionController::class, 'index'])->name('session.index');
-        Route::get('/sessao/create/{prontuario_id}', [SessionController::class, 'create'])->name('session.create');
+        Route::get('/sessao/create/{cliente_id}', [SessionController::class, 'create'])->name('session.create');
         Route::post('/sessao', [SessionController::class, 'store'])->name('session.store');
         Route::get('/sessao/{sessao_id}', [SessionController::class, 'show'])->name('session.show');
         Route::get('/sessao/{sessao_id}/edit', [SessionController::class, 'edit'])->name('session.edit');

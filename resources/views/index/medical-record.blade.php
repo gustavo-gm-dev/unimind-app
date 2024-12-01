@@ -12,7 +12,7 @@
     @endif
 
     @if (request()->routeIs('medical-records.edit') && isset($patient))
-        @include('medical-records.edit', ['patient' => $patient, 'medicalRecord' => $medicalRecord, 'sessions' => $sessions])
+        @include('medical-records.edit', ['patient' => $patient])
     @else
         @include('medical-records.list', ['patients' => $patients])
     @endif

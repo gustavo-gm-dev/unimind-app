@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class MedicalRecordController extends Controller
 {
@@ -15,35 +16,26 @@ class MedicalRecordController extends Controller
         $user = auth()->user(); // Usuário autenticado
 
         // Filtra os clientes que estão vinculados ao aluno autenticado
-        $patients = Cliente::whereHas('vinculo', function ($query) use ($user) {
-            $query->where('vinculo_aluno_id', $user->id);
-        })->with('prontuario', 'prontuario.sessoes')->get();
+        $patients = Cliente::accessibleByUser($user)->get();
 
         return view('index.medical-record', compact('patients'));
     }
 
     public function edit($id)
     {
-        $user = auth()->user(); // Usuário autenticado
+        $user = Auth::user(); // Usuário autenticado
+    
+        // Recupera os pacientes acessíveis ao usuário
+        $patient = Cliente::accessibleByUser($user)
+            ->findOrFail($id);
 
-        // Busca o paciente apenas se o aluno tiver acesso
-        $patient = Cliente::whereHas('vinculo', function ($query) use ($user) {
-            $query->where('vinculo_aluno_id', $user->id);
-        })->with('prontuario.ultimoArquivo')->findOrFail($id);
-
-        // Busca o prontuário associado ao paciente
-        $medicalRecord = $patient->prontuario;
-
-        // Busca as sessões associadas ao prontuário, ou uma coleção vazia se o prontuário não existir
-        $sessions = $medicalRecord ? $medicalRecord->sessoes : collect();
-
-        return view('index.medical-record', compact('patient', 'medicalRecord', 'sessions'));
+        return view('index.medical-record', compact('patient'));
     }
 
-    public function save(Request $request, $id = null)
+    public function save(Request $request, $cliente_id)
     {
         $user = auth()->user(); // Usuário autenticado
-
+    
         // Validação dos dados do prontuário
         $validated = $request->validate([
             'prontuario_tx_historico_familiar' => 'nullable|string',
@@ -51,17 +43,31 @@ class MedicalRecordController extends Controller
             'prontuario_tx_consideracoes' => 'nullable|string',
             'prontuario_tx_observacao' => 'nullable|string',
         ]);
-
-        // Verifica se o aluno tem acesso ao paciente
+        
+        $validated['prontuario_st_validacao_prof'] = false;
+        $validated['prontuario_usuario_id_atualizado'] = $user->id;
+    
+        // Verifica se o aluno ou professor tem acesso ao paciente
         $patient = Cliente::whereHas('vinculo', function ($query) use ($user) {
-            $query->where('vinculo_aluno_id', $user->id);
-        })->findOrFail($id);
-
+            if ($user->role === 'role_aluno') {
+                $query->where('vinculo_aluno_id', $user->id);
+            } elseif ($user->role === 'role_professor') {
+                $query->whereHas('aluno', function ($subQuery) use ($user) {
+                    $subQuery->where('professor_id', $user->id);
+                });
+            }
+        })->findOrFail($cliente_id);
+    
         // Atualiza ou cria o prontuário
-        $medicalRecord = $patient->prontuario()->updateOrCreate([], $validated);
-
-        return redirect()->route('index.medical-record')->with('success', 'Prontuário atualizado com sucesso!');
+        $medicalRecord = $patient->prontuario()->updateOrCreate(
+            ['prontuario_cliente_id' => $patient->cliente_id], // Condição para verificar existência
+            $validated // Dados para criação ou atualização
+        );
+    
+        return redirect()->route('index.medical-record')->with('success', 'Prontuário salvo com sucesso!');
     }
+    
+    
 
     public function uploadFile(Request $request, $idPatient, $idRecord)
     {

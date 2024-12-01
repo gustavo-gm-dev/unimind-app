@@ -38,35 +38,33 @@
 <div class="py-4">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-            <form method="POST" action="{{ route('medical-records.save', $medicalRecord->prontuario_id ?? null) }}">
+            <form method="POST" action="{{ route('medical-records.save', $patient->cliente_id) }}">
                 @csrf
-                @if(isset($medicalRecord->prontuario_id))
-                    @method('PUT')
-                @endif
+                @method('PUT')
 
-                
-                @isset($medicalRecord->prontuario_id)
-                    
+                @if(isset($patient->prontuario->prontuario_id))                    
                 <div class="flex items-center justify-between">
                     <!-- Informações do Prontuário -->
                     <div class="flex-1">
                         <div class="mb-2">
                             <p class="text-sm text-gray-600">
-                                <strong>{{ __('Data de Cadastro:') }}</strong> {{ $medicalRecord->created_at->format('d/m/Y H:i:s') }}
+                                <strong>{{ __('Data de Cadastro:') }}</strong>
+                                {{ $patient->prontuario->created_at->format('d/m/Y H:i:s') }}
                             </p>
                         </div>
                         <div class="mb-4">
                             <p class="text-sm text-gray-600">
-                                <strong>{{ __('Última Atualização:') }}</strong> {{ $medicalRecord->updated_at->format('d/m/Y H:i:s') }}
+                                <strong>{{ __('Última Atualização:') }}</strong> 
+                                {{ $patient->prontuario->updated_at->format('d/m/Y H:i:s') }}
                             </p>
                         </div>
                     </div>
                 
-                @if ($medicalRecord->ultimoArquivo)
+                @if ($patient->prontuario->ultimoArquivo)
                 <!-- Ícone de Visualizar -->
                     <div class="flex-none w-auto">
                         <div class="flex justify-end">
-                            <a href="{{ route('records.view', ['idPatient' => $patient->cliente_id, 'idRecord' => $medicalRecord->prontuario_id, 'fileId' => $medicalRecord->ultimoArquivo->arquivo_id]) }}" 
+                            <a href="{{ route('records.view', ['idPatient' => $patient->cliente_id, 'idRecord' => $patient->prontuario->prontuario_id, 'fileId' => $patient->prontuario->ultimoArquivo->arquivo_id]) }}" 
                             class="cursor-pointer bg-blue-100 hover:bg-blue-200 rounded-full p-2 inline-flex items-center transition duration-150 ease-in-out">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 -960 960 960" fill="#5985E1">
                                     <path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v240h-80v-200H520v-200H240v640h360v80H240Zm638 15L760-183v89h-80v-226h226v80h-90l118 118-56 57Zm-638-95v-640 640Z"/>
@@ -83,25 +81,25 @@
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_historico_familiar" :value="__('Histórico Familiar')" />
                     <textarea id="prontuario_tx_historico_familiar" name="prontuario_tx_historico_familiar" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('prontuario_tx_historico_familiar', $medicalRecord->prontuario_tx_historico_familiar ?? '') }}</textarea>
+                        >{{ old('prontuario_tx_historico_familiar', $patient->prontuario->prontuario_tx_historico_familiar ?? '') }}</textarea>
                 </div>
 
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_historico_social" :value="__('Histórico Social')" />
                     <textarea id="prontuario_tx_historico_social" name="prontuario_tx_historico_social" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('prontuario_tx_historico_social', $medicalRecord->prontuario_tx_historico_social ?? '') }}</textarea>
+                        >{{ old('prontuario_tx_historico_social', $patient->prontuario->prontuario_tx_historico_social ?? '') }}</textarea>
                 </div>
 
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_consideracoes" :value="__('Considerações')" />
                     <textarea id="prontuario_tx_consideracoes" name="prontuario_tx_consideracoes" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('prontuario_tx_consideracoes', $medicalRecord->prontuario_tx_consideracoes ?? '') }}</textarea>
+                        >{{ old('prontuario_tx_consideracoes', $patient->prontuario->prontuario_tx_consideracoes ?? '') }}</textarea>
                 </div>
 
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_observacao" :value="__('Observações')" />
                     <textarea id="prontuario_tx_observacao" name="prontuario_tx_observacao" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                        >{{ old('prontuario_tx_observacao', $medicalRecord->prontuario_tx_observacao ?? '') }}</textarea>
+                        >{{ old('prontuario_tx_observacao', $patient->prontuario->prontuario_tx_observacao ?? '') }}</textarea>
                 </div>
 
                 <!-- Botão de Salvar -->
@@ -119,9 +117,9 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
             <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">{{ __('Sessões') }}</h3>
-            <x-view-sessions :sessions="$sessions" :medicalRecord="$medicalRecord"/>
+            <x-view-sessions :sessions="$patient->prontuario" :sessions="$patient->sessoes"/>
             <div class="mt-8 flex justify-end">
-                <x-link-button href="{{ route('session.create', $medicalRecord->prontuario_id) }}">
+                <x-link-button href="{{ route('session.create', $patient->cliente_id) }}">
                     {{ __('Nova Sessão') }}
                 </x-link-button>
             </div>
