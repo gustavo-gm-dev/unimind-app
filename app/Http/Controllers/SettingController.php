@@ -14,15 +14,13 @@ class SettingController extends Controller
     {
 
         $patients = Cliente::all();
-        $students = User::query()
-            ->where('role', User::ROLE_ALUNO)
-            ->get();
         $vinculos = Vinculo::all();
+        $users = User::all();
 
         // Verifica se o usuário é 'role_professor' ou 'role_admin'
         if (Auth::check() && (Auth::user()->role === 'role_professor' || Auth::user()->role === 'role_admin')) {
             // Retorna a view se a validação passar
-            return view('index.setting', compact('patients','students','vinculos'));
+            return view('index.setting', compact('patients','vinculos','users'));
         }
     
         // Se a validação falhar, retorna um erro 403 ou redireciona para outra página

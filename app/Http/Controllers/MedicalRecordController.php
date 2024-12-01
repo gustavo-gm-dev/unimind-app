@@ -15,7 +15,7 @@ class MedicalRecordController extends Controller
         $user = auth()->user(); // Usuário autenticado
 
         // Filtra os clientes que estão vinculados ao aluno autenticado
-        $patients = Cliente::whereHas('vinculos', function ($query) use ($user) {
+        $patients = Cliente::whereHas('vinculo', function ($query) use ($user) {
             $query->where('vinculo_aluno_id', $user->id);
         })->with('prontuario', 'prontuario.sessoes')->get();
 
@@ -27,7 +27,7 @@ class MedicalRecordController extends Controller
         $user = auth()->user(); // Usuário autenticado
 
         // Busca o paciente apenas se o aluno tiver acesso
-        $patient = Cliente::whereHas('vinculos', function ($query) use ($user) {
+        $patient = Cliente::whereHas('vinculo', function ($query) use ($user) {
             $query->where('vinculo_aluno_id', $user->id);
         })->with('prontuario.ultimoArquivo')->findOrFail($id);
 
@@ -53,7 +53,7 @@ class MedicalRecordController extends Controller
         ]);
 
         // Verifica se o aluno tem acesso ao paciente
-        $patient = Cliente::whereHas('vinculos', function ($query) use ($user) {
+        $patient = Cliente::whereHas('vinculo', function ($query) use ($user) {
             $query->where('vinculo_aluno_id', $user->id);
         })->findOrFail($id);
 
@@ -75,7 +75,7 @@ class MedicalRecordController extends Controller
 
         // Verifica se o aluno tem acesso ao paciente
         $prontuario = Prontuario::where('prontuario_cliente_id', $idPatient)
-            ->whereHas('cliente.vinculos', function ($query) use ($user) {
+            ->whereHas('cliente.vinculo', function ($query) use ($user) {
                 $query->where('vinculo_aluno_id', $user->id);
             })
             ->where('prontuario_id', $idRecord)
@@ -113,7 +113,7 @@ class MedicalRecordController extends Controller
             // Verifica se o aluno tem acesso ao prontuário
             $prontuario = Prontuario::where('prontuario_cliente_id', $idPatient)
                 ->where('prontuario_id', $idRecord)
-                ->whereHas('cliente.vinculos', function ($query) use ($user) {
+                ->whereHas('cliente.vinculo', function ($query) use ($user) {
                     $query->where('vinculo_aluno_id', $user->id);
                 })
                 ->firstOrFail();

@@ -25,7 +25,6 @@ class Endereco extends Model
         'endereco_cidade',
         'endereco_uf',
         'endereco_cep',
-        'endereco_pais',
     ];
 
     // Relacionamento

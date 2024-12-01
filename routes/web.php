@@ -60,6 +60,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/atrelar-aluno/{vinculo_cliente_id}/edit', [SettingController::class, 'edit'])->name('setting.edit');
         Route::put('/atrelar-aluno/{vinculo_aluno_id}/{vinculo_cliente_id}', [SettingController::class, 'update'])->name('setting.update');
         Route::post('/atrelar-aluno/buscar', [SettingController::class, 'find'])->name('setting.find');
+        Route::patch('/user/inactivate', [UserController::class, 'inactivate'])->name('user.inactivate');
+        Route::patch('/patient/inactivate', [PatientController::class, 'inactivate'])->name('patient.inactivate');
 
 
 // Rota para salvar os vínculos

@@ -19,7 +19,7 @@
         <!-- Lista Professor -->
         <div class="mt-4">
             <x-input-label for="professor" :value="__('Qual seu professor?')" />
-                <select name="professor" id="professor" class="block mt-1 w-full" required>
+                <select name="professor" id="professor" class="block mt-1 w-full">
                     <option value="">Selecione um professor</option>
                     @foreach ($listProfessor as $professor)
                         <option value="{{ $professor->id }}">{{ $professor->name }}</option>

@@ -60,23 +60,22 @@ return new class extends Migration
             $table->string('contato_emergencia', 1);
             $table->timestamps();
 
-            $table->foreign('cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
+            $table->foreign('contato_cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
         });
 
         Schema::create('enderecos', function (Blueprint $table) {
             $table->id('endereco_id');
             $table->unsignedBigInteger('endereco_cliente_id');
-            $table->string('endereco_logradouro', 255);
-            $table->integer('endereco_numero');
+            $table->string('endereco_logradouro', 255)->nullable();
+            $table->integer('endereco_numero')->nullable();
             $table->string('endereco_complemento', 255)->nullable();
-            $table->string('endereco_bairro', 100);
-            $table->string('endereco_cidade', 100);
-            $table->string('endereco_uf', 2);
-            $table->string('endereco_cep', 8);
-            $table->string('endereco_pais', 25);
+            $table->string('endereco_bairro', 100)->nullable();
+            $table->string('endereco_cidade', 100)->nullable();
+            $table->string('endereco_uf', 2)->nullable();
+            $table->string('endereco_cep', 15)->nullable();
             $table->timestamps();
 
-            $table->foreign('cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
+            $table->foreign('endereco_cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
         });
 
         Schema::create('prontuarios', function (Blueprint $table) {
@@ -150,7 +149,7 @@ return new class extends Migration
         Schema::dropIfExists('contatos');
         Schema::dropIfExists('cliente_necessidades');
         Schema::dropIfExists('necessidades');
-        Schema::dropIfExists('clientes');
         Schema::dropIfExists('vinculos');
+        Schema::dropIfExists('clientes');
     }
 };

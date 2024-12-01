@@ -38,9 +38,8 @@ class Cliente extends Model
     // Relacionamentos
     public function endereco()
     {
-        return $this->hasMany(Endereco::class, 'endereco_cliente_id', 'cliente_id');
+        return $this->hasOne(Endereco::class, 'endereco_cliente_id', 'cliente_id');
     }
-
 
     public function prontuario()
     {
@@ -65,7 +64,7 @@ class Cliente extends Model
     public function scopeByAluno($query, $user)
     {
         if ($user->isAluno()) {
-            return $query->whereHas('vinculos', function ($q) use ($user) {
+            return $query->whereHas('vinculo', function ($q) use ($user) {
                 $q->where('vinculo_aluno_id', $user->id);
             });
         }
@@ -76,8 +75,43 @@ class Cliente extends Model
     /**
      * Relacionamento com vínculos
      */
-    public function vinculos()
+    public function vinculo()
     {
-        return $this->hasMany(Vinculo::class, 'vinculo_cliente_id', 'cliente_id');
+        return $this->hasOne(Vinculo::class, 'vinculo_cliente_id', 'cliente_id');
+    }
+
+    /**
+     * Verifica se todos os dados obrigatórios estão preenchidos para marcar o cadastro como completo.
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function isCadastroCompleto(): bool
+    {
+        // Verifica se os campos do cliente estão preenchidos
+        $camposCliente = [
+            $this->cliente_dt_nascimento,
+            $this->cliente_escolaridade,
+            $this->cliente_genero,
+            $this->cliente_periodo_preferencia,
+            $this->cliente_tipo_atendimento,
+            $this->cliente_st_confirma_dados,
+        ];
+    
+        // Obtém o endereço associado ao cliente
+        $endereco = $this->endereco;
+    
+        // Verifica se os campos do endereço estão preenchidos
+        $camposEndereco = $endereco ? [
+            $endereco->endereco_logradouro,
+            $endereco->endereco_numero,
+            $endereco->endereco_bairro,
+            $endereco->endereco_cidade,
+            $endereco->endereco_uf,
+            $endereco->endereco_cep,
+        ] : [];
+    
+        // Retorna verdadeiro se todos os campos estiverem preenchidos
+        return collect(array_merge($camposCliente, $camposEndereco))->every(fn($campo) => !empty($campo));
     }
 }
