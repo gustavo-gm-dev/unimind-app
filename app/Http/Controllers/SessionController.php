@@ -2,165 +2,108 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Session;
-use App\Models\Patient;
+use App\Models\Sessao;
+use App\Models\Prontuario;
+use App\Models\Cliente;
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
-    /**
-     * Inicia uma sessão.
-     */
-    public function start($id)
+    public function create($prontuario_id)
     {
-        $patient = (object)[
-            'id' => $id,
-            'name' => 'João da Silva',
-            'email' => 'joao.silva@example.com',
-            'cpf' => '123.456.789-10',
-            'rg' => '12.345.678-9',
-            'phone' => '(11) 98765-4321',
-            'date_birth' => '1985-05-20',
-            'education' => 'superior',
-            'gender' => 'masculino',
-        ];
-
-        $medicalRecord = (object)[
-            'prontuario_id' => 1,
-            'prontuario_cliente_id' => 1,
-            'prontuario_dt_register' => '2024-11-20',
-            'prontuario_dt_update' => '2024-11-20',
-            'prontuario_tx_family_history' => 'Histórico familiar inclui casos de ansiedade generalizada na mãe e depressão no pai. Irmão mais velho também apresenta episódios de ansiedade.',
-            'prontuario_tx_historico_social' => 'Paciente relata dificuldades em criar vínculos afetivos profundos. Vive sozinho em um apartamento na cidade e tem poucos amigos próximos. Relata sentir solidão frequentemente, embora participe de eventos sociais esporádicos.',
-            'prontuario_tx_considerations' => 'Considerar o impacto do isolamento social na saúde mental do paciente. Indicar atividades que promovam interação social e estímulos positivos. Avaliar estratégias para lidar com crises de ansiedade durante sessões futuras.',
-            'prontuario_tx_observation' => 'Paciente demonstrou resistência inicial ao processo terapêutico, mas aceitou sugestões para práticas de respiração e mindfulness. Apresenta níveis moderados de estresse e ansiedade. Recomendado acompanhamento contínuo com avaliação mensal de progresso.',
-            'prontuario_st_validation_teacher' => 'N'
-        ];
-
-
-        return view('index.medical-record', compact('medicalRecord', 'patient'));
-    }
-
-    public function upload(Request $request, $idPatient, $idRecord)
-    {
-        // Validação dos arquivos
-        $request->validate([
-            'files.*' => 'required|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
-        ]);
+        // Busca o prontuário com o cliente relacionado
+        $medicalRecord = Prontuario::with('cliente')->findOrFail($prontuario_id);
     
-        // Caminho do diretório com base no ID do paciente
-        $directory = public_path("files/patients/$idPatient");
-    
-        // Cria o diretório se ele não existir
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
+        // Valida se o prontuário possui um cliente associado
+        if (!$medicalRecord->cliente) {
+            return redirect()->back()->withErrors('O prontuário não possui um cliente associado.');
         }
     
-        foreach ($request->file('files') as $file) {
-            // Nome do arquivo: PRONT_{id}_{timestamp}.pdf
-            $timestamp = now()->format('YmdHis'); // Formato: AAAAMMDDHHMMSS
-            $fileName = "PRONT_{$idRecord}_{$timestamp}." . $file->getClientOriginalExtension();
+        // Obtém o cliente relacionado
+        $patient = $medicalRecord->cliente;
+        
+        // Determina o período com base no horário atual
+        $hour = now()->format('H'); // Hora atual no formato 24h
+        $sessao_periodo = match (true) {
+            $hour >= 6 && $hour < 12 => 'manha',
+            $hour >= 12 && $hour < 18 => 'tarde',
+            $hour >= 18 || $hour < 6 => 'noite',
+        };
+
+        // Cria a sessão
+        $session = Sessao::create([
+            'sessao_prontuario_id' => $medicalRecord->prontuario_id,
+            'sessao_dt_inicio' => now(),
+            'sessao_periodo' => $sessao_periodo,
+            'sessao_st_presenca' => true,
+            'sessao_st_confirmado' => 'INICIADA', // Considere usar constantes ou enums
+        ]);
     
-            // Salva o arquivo no diretório público
-            $file->move($directory, $fileName);
+        // Retorna a view com os dados do paciente e do prontuário
+        return view('index.session', compact('patient', 'medicalRecord', 'session'));
+    }
+
+    public function update(Request $request, $sessao_id)
+    {
+        // Valida os dados enviados
+        $validatedData = $request->validate([
+            'sessao_tx_principal' => 'nullable|string|max:500',
+            'sessao_tx_procedure' => 'nullable|string|max:500',
+            'sessao_tx_forwarding' => 'nullable|string|max:500',
+            'sessao_tx_observation' => 'nullable|string|max:500',
+        ]);
+    
+        // Localiza a sessão pelo ID
+        $session = Sessao::findOrFail($sessao_id);
+        
+        // Determina a ação (salvar ou finalizar)
+        $action = $request->input('action');
+
+        if ($action === 'save') {
+            // Salva os dados e mantem status INICIADA
+            $session->update([
+                'sessao_tx_principal' => $validatedData['sessao_tx_principal'] ?? null,
+                'sessao_tx_procedimento' => $validatedData['sessao_tx_procedure'] ?? null,
+                'sessao_tx_encaminhamento' => $validatedData['sessao_tx_forwarding'] ?? null,
+                'sessao_tx_observacao' => $validatedData['sessao_tx_observation'] ?? null,
+                'sessao_st_presenca' => true,
+                'sessao_st_confirmado' => 'INICIADA',
+            ]);
+        } elseif ($action === 'finalize') {
+            // Atualiza os dados da sessão
+            $session->update([
+                'sessao_tx_principal' => $validatedData['sessao_tx_principal'] ?? null,
+                'sessao_tx_procedimento' => $validatedData['sessao_tx_procedure'] ?? null,
+                'sessao_tx_encaminhamento' => $validatedData['sessao_tx_forwarding'] ?? null,
+                'sessao_tx_observacao' => $validatedData['sessao_tx_observation'] ?? null,
+                'sessao_st_presenca' => true,
+                'sessao_st_confirmado' => 'CONCLUIDA',
+                'sessao_dt_fim' => now(),
+            ]);
         }
+        
+        // Obtém o prontuário e o paciente relacionados
+        $medicalRecord = Prontuario::findOrFail($session->sessao_prontuario_id);
+        $patient = $medicalRecord->cliente;
     
-        //return redirect()->back()->with('success', 'Arquivos enviados com sucesso!');
-        return redirect()->route('medical_records.edit')->with('success', 'Arquivos enviados com sucesso!');
-    }
-    
-    
-
-    public function view($id, $file)
-    {
-        //$filePath = public_path("files/patients/$id/$file");
-        $filePath = public_path("files/patients/1/PRONT_1_20241120190100.pdf");
-
-        if (!file_exists($filePath)) {
-            abort(404, 'Arquivo não encontrado.');
-        }
-
-        return response()->file($filePath);
+        // Redireciona com mensagem de sucesso
+        return redirect()->route('medical-records.edit', $patient->cliente_id)->with('success', 'Sessão salva com sucesso!');
     }
 
-    /**
-     * Lista todas as sessões.
-     */
-    public function index()
+    public function edit($sessao_id)
     {
-        $sessions = Session::with('patient')->get(); // Carrega as sessões com os pacientes vinculados
-        return view('sessions.index', compact('sessions'));
-    }
+        //busca pela sessao
+        $session = Sessao::findOrFail($sessao_id);
 
-    /**
-     * Exibe os detalhes de uma sessão específica.
-     */
-    public function show($id)
-    {
-        $session = Session::with('patient')->findOrFail($id); // Carrega a sessão e o paciente
-        return view('sessions.show', compact('session'));
-    }
-
-    /**
-     * Exibe o formulário de criação de uma nova sessão.
-     */
-    public function create()
-    {
-        $patients = Patient::all(); // Lista todos os pacientes
-        return view('sessions.create', compact('patients'));
-    }
-
-    /**
-     * Salva uma nova sessão no banco de dados.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'date' => 'required|date',
-            'status' => 'required|string|max:255',
+        $session->update([
+            'sessao_st_presenca' => true,
+            'sessao_st_confirmado' => 'INICIADA',
         ]);
 
-        Session::create($validated);
+        // Obtém o prontuário e o paciente relacionados
+        $medicalRecord = Prontuario::findOrFail($session->sessao_prontuario_id);
+        $patient = $medicalRecord->cliente;
 
-        return redirect()->route('sessions.index')->with('success', 'Sessão criada com sucesso!');
-    }
-
-    /**
-     * Exibe o formulário de edição de uma sessão.
-     */
-    public function edit($id)
-    {
-        $session = Session::findOrFail($id);
-        $patients = Patient::all(); // Lista todos os pacientes para selecionar
-        return view('sessions.edit', compact('session', 'patients'));
-    }
-
-    /**
-     * Atualiza os dados de uma sessão no banco de dados.
-     */
-    public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'patient_id' => 'required|exists:patients,id',
-            'date' => 'required|date',
-            'status' => 'required|string|max:255',
-        ]);
-
-        $session = Session::findOrFail($id);
-        $session->update($validated);
-
-        return redirect()->route('sessions.index')->with('success', 'Sessão atualizada com sucesso!');
-    }
-
-    /**
-     * Remove uma sessão do banco de dados.
-     */
-    public function destroy($id)
-    {
-        $session = Session::findOrFail($id);
-        $session->delete();
-
-        return redirect()->route('sessions.index')->with('success', 'Sessão excluída com sucesso!');
+        return view('index.session', compact('patient', 'medicalRecord', 'session'));
     }
 }

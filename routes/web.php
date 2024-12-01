@@ -1,24 +1,27 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\SessionController;
-use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SchedulingController;
+use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
+use Barryvdh\DomPDF\PDF;
 
 // Página inicial
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware(['role' => CheckRole::class]);
+
 // Rotas protegidas por autenticação
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Pacientes
     Route::prefix('/pacientes')->group(function () {
@@ -26,40 +29,69 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dash/{id}', [PatientController::class, 'show'])->name('patients.show');
         Route::get('/{id}/edit', [PatientController::class, 'edit'])->name('patients.edit');
         Route::put('/{id}/update', [PatientController::class, 'update'])->name('patients.update');
+        Route::get('/create', [PatientController::class, 'create'])->name('patients.create');
+        Route::post('/store', [PatientController::class, 'store'])->name('patients.store');
     });
 
     // Prontuários
     Route::prefix('prontuarios')->group(function () {
         Route::get('/', [MedicalRecordController::class, 'index'])->name('index.medical-record');
-        Route::get('/{id}', [MedicalRecordController::class, 'show'])->name('medical-records.show');
         Route::get('/{id}/edit', [MedicalRecordController::class, 'edit'])->name('medical-records.edit');
-        Route::post('/{id}/upload', [MedicalRecordController::class, 'upload'])->name('medical-records.upload');
-        Route::put('/{id}', [MedicalRecordController::class, 'update'])->name('medical-records.update');
+        Route::put('/medical-records/{clinete_id}/save', [MedicalRecordController::class, 'save'])->name('medical-records.save');
+        //arquivo
+        Route::post('/patients/{idPatient}/records/{idRecord}/upload', [MedicalRecordController::class, 'uploadFile'])->name('records.upload');
+        Route::get('/patients/{idPatient}/records/{idRecord}/file/{fileId}', [MedicalRecordController::class, 'viewFile'])->name('records.view');
 
-        Route::put('/medical-records/{id}/save', [MedicalRecordController::class, 'save'])->name('medical-records.save');
-
-        // Rotas para Sessões
-        Route::post('/{id}/sessions', [SessionController::class, 'store'])->name('sessions.store');
-        Route::get('/sessions/{id}', [SessionController::class, 'show'])->name('sessions.show');
-        Route::put('/sessions/{id}', [SessionController::class, 'update'])->name('sessions.update');
-
-        Route::get('/sessions/{id}', [SessionController::class, 'start'])->name('sessions.start');
-        Route::get('/sessions/{id}/view/{file}', [SessionController::class, 'view'])->name('sessions.view');
-        Route::post('/sessions/{idPatient}/upload/{idRecord}', [SessionController::class, 'upload'])->name('sessions.upload');
+        //sessao
+        Route::get('/sessoes', [SessionController::class, 'index'])->name('session.index');
+        Route::get('/sessao/create/{cliente_id}', [SessionController::class, 'create'])->name('session.create');
+        Route::post('/sessao', [SessionController::class, 'store'])->name('session.store');
+        Route::get('/sessao/{sessao_id}', [SessionController::class, 'show'])->name('session.show');
+        Route::get('/sessao/{sessao_id}/edit', [SessionController::class, 'edit'])->name('session.edit');
+        Route::put('/sessao/{sessao_id}', [SessionController::class, 'update'])->name('session.update');
     });
 
     // Configurações
-    Route::get('/configuracoes', [ConfigController::class, 'index'])->name('settings');
+    Route::prefix('/configuracao')->group(function () {
+        Route::get('/atrelar-aluno', [SettingController::class, 'index'])->name('setting.index');
+        Route::get('/atrelar-aluno/create', [SettingController::class, 'create'])->name('setting.create');
+        Route::post('/atrelar-aluno', [SettingController::class, 'store'])->name('setting.store');
+        Route::get('/atrelar-aluno/{vinculo_cliente_id}', [SettingController::class, 'show'])->name('setting.show');
+        Route::get('/atrelar-aluno/{vinculo_cliente_id}/edit', [SettingController::class, 'edit'])->name('setting.edit');
+        Route::put('/atrelar-aluno/{vinculo_aluno_id}/{vinculo_cliente_id}', [SettingController::class, 'update'])->name('setting.update');
+        Route::post('/atrelar-aluno/buscar', [SettingController::class, 'find'])->name('setting.find');
+        Route::patch('/user/inactivate', [UserController::class, 'inactivate'])->name('user.inactivate');
+        Route::patch('/patient/inactivate', [PatientController::class, 'inactivate'])->name('patient.inactivate');
+
+
+// Rota para salvar os vínculos
+Route::post('/vinculos', [VinculoController::class, 'salvar'])->name('vinculos.salvar');
+    });
 
     // Perfil do usuário
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::patch('/update-professor', [ProfileController::class, 'updateProfessor'])->name('professor.update');
+
     });
 
-    Route::get('/sessoes/{id}', [SessionController::class, 'show'])->name('session.show');
-    Route::get('/sessoes/{id}/edit', [SessionController::class, 'edit'])->name('session.edit');
+    //Agendamento
+    Route::prefix('scheduling')->group(function () {
+        Route::get('create/{id}', [SchedulingController::class, 'create'])->name('scheduling.create');
+        Route::post('store/{id}', [SchedulingController::class, 'store'])->name('scheduling.store');
+        Route::get('edit/{id}', [SchedulingController::class, 'edit'])->name('scheduling.edit');
+        Route::post('update/{id}', [SchedulingController::class, 'update'])->name('scheduling.update');
+    });
+
+    // Prontuários PDF
+    Route::get('/pdf', function(){
+
+        $pdf = PDF::loadView('welcome');
+        return $pdf->download('o.pdf');
+    });
+
 });
 
 // Rotas de autenticação

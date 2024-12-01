@@ -18,8 +18,9 @@ class RegisteredUserController extends Controller
      * Display the registration view.
      */
     public function create(): View
-    {
-        return view('auth.register');
+    {   
+        $listProfessor = User::where('role', User::ROLE_PROFESSOR)->get();
+        return view('auth.register', compact('listProfessor'));
     }
 
     /**
@@ -33,12 +34,15 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'professor' => ['nullable', 'exists:users,id'], // Torna opcional e válida se existir
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'role_aluno', // Salva role padrão
+            'professor_id' => $request->professor ?? null, // Salva como null se não enviado
         ]);
 
         event(new Registered($user));
@@ -47,4 +51,5 @@ class RegisteredUserController extends Controller
 
         return redirect(route('dashboard', absolute: false));
     }
+
 }
