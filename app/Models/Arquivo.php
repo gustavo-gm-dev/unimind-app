@@ -13,13 +13,14 @@ class Arquivo extends Model
     protected $table = 'arquivos';
 
     protected $fillable = [
+        'arquivo_prontuario_id',
         'arquivo_url',
         'arquivo_dt_realizada',
     ];
 
     public function prontuario()
     {
-        return $this->belongsTo(Prontuario::class, 'prontuario_id');
+        return $this->belongsTo(Prontuario::class, 'arquivo_prontuario_id', 'prontuario_id');
     }
 }
 

@@ -149,11 +149,11 @@
                             
                             <!-- Input para Data -->
                             <div class="mb-4">
-                                <label for="session_date" class="block text-sm font-medium text-gray-700">{{ __('Data') }}</label>
+                                <label for="arquivo_dt_realizada" class="block text-sm font-medium text-gray-700">{{ __('Data da Realização') }}</label>
                                 <input 
                                     type="date" 
-                                    name="session_date" 
-                                    id="session_date" 
+                                    name="arquivo_dt_realizada" 
+                                    id="arquivo_dt_realizada" 
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
                                     required
                                 />

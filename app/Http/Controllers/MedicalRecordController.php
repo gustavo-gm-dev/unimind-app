@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Prontuario;
 use App\Models\Cliente;
 use App\Models\User;
+use App\Models\Arquivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -74,8 +75,8 @@ class MedicalRecordController extends Controller
         $user = auth()->user(); // Usuário autenticado
 
         // Validação dos campos do formulário
-        $request->validate([
-            'file' => 'required|mimes:pdf|max:2048', // Apenas arquivos PDF, tamanho máximo de 2MB
+        $validated = $request->validate([
+            'file' => 'required|mimes:pdf|max:10048', // Apenas arquivos PDF, tamanho máximo de 10MB
             'arquivo_dt_realizada' => 'required|date', // Data obrigatória
         ]);
 
@@ -102,13 +103,17 @@ class MedicalRecordController extends Controller
 
         // Criar um novo registro de arquivo diretamente relacionado ao prontuário
         Arquivo::create([
-            'prontuario_id' => $prontuario->prontuario_id,
+            'arquivo_prontuario_id' => $prontuario->prontuario_id,
             'arquivo_url' => "files/patients/{$idPatient}/{$fileName}",
             'arquivo_dt_realizada' => $request->input('arquivo_dt_realizada'),
         ]);
 
-        return redirect()->route('medical-records.edit', $idPatient)
-            ->with('success', 'Arquivo carregado com sucesso!');
+        $user = Auth::user(); // Usuário autenticado
+    
+        // Recupera os pacientes acessíveis ao usuário
+        $patient = Cliente::accessibleByUser($user)
+            ->findOrFail($user->id);
+        return view('index.medical-record', compact('patient'))->with('success', 'Arquivo carregado com sucesso!');            
     }
 
     public function viewFile($idPatient, $idRecord, $fileId)

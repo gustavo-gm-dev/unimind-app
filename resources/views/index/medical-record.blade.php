@@ -11,7 +11,7 @@
         </div>
     @endif
 
-    @if (request()->routeIs('medical-records.edit') && isset($patient))
+    @if (isset($patient))
         @include('medical-records.edit', ['patient' => $patient])
     @else
         @include('medical-records.list', ['patients' => $patients])
