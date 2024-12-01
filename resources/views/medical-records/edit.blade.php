@@ -18,7 +18,7 @@
 
                 <x-slot name="content">
                     <div class="mx-4 bg-gray-100 sm:rounded-lg">
-                        <ul class="p-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
+                        <ul class="p-4 text-sm text-gray-600 dark:text-gray-300 space-y-2 dark:bg-gray-800 text-gray-200">
                             <li><strong>{{ __('Nome:') }}</strong> {{ $patient->cliente_nome }}</li>
                             <li><strong>{{ __('E-mail:') }}</strong> {{ $patient->cliente_email }}</li>
                             <li><strong>{{ __('CPF:') }}</strong> {{ $patient->cliente_cpf }}</li>
@@ -26,7 +26,7 @@
                             <li><strong>{{ __('Telefone:') }}</strong> {{ $patient->cliente_telefone }}</li>
                             <li><strong>{{ __('Data de Nascimento:') }}</strong> {{ $patient->cliente_dt_nascimento }}</li>
                             <li><strong>{{ __('Escolaridade:') }}</strong> {{ ucfirst($patient->cliente_escolaridade) }}</li>
-                            <li><strong>{{ __('Gênero:') }}</strong> {{ ucfirst($patient->cliente_genero) }}</li>                            
+                            <li><strong>{{ __('Gênero:') }}</strong> {{ ucfirst($patient->cliente_genero) }}</li>
                         </ul>
                     </div>
                 </x-slot>
@@ -37,37 +37,37 @@
 
 <div class="py-4">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+        <div class="bg-white dark:bg-gray-800 text-gray-200 overflow-hidden shadow-sm sm:rounded-lg p-6">
             <form method="POST" action="{{ route('medical-records.save', $medicalRecord->prontuario_id ?? null) }}">
                 @csrf
                 @if(isset($medicalRecord->prontuario_id))
                     @method('PUT')
                 @endif
 
-                
+
                 @isset($medicalRecord->prontuario_id)
-                    
-                <div class="flex items-center justify-between">
+
+                <div class="flex items-center justify-between dark:bg-gray-800 text-gray-200">
                     <!-- Informações do Prontuário -->
                     <div class="flex-1">
-                        <div class="mb-2">
-                            <p class="text-sm text-gray-600">
+                        <div class="mb-2 dark:bg-gray-800 text-gray-200">
+                            <p class="text-sm text-gray-600 dark:bg-gray-800 text-gray-200">
                                 <strong>{{ __('Data de Cadastro:') }}</strong> {{ $medicalRecord->created_at->format('d/m/Y H:i:s') }}
                             </p>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-sm text-gray-600">
+                        <div class="mb-4 dark:bg-gray-800 text-gray-200">
+                            <p class="text-sm text-gray-600 dark:bg-gray-800 text-gray-200">
                                 <strong>{{ __('Última Atualização:') }}</strong> {{ $medicalRecord->updated_at->format('d/m/Y H:i:s') }}
                             </p>
                         </div>
                     </div>
-                
+
                 @if ($medicalRecord->ultimoArquivo)
                 <!-- Ícone de Visualizar -->
                     <div class="flex-none w-auto">
                         <div class="flex justify-end">
-                            <a href="{{ route('records.view', ['idPatient' => $patient->cliente_id, 'idRecord' => $medicalRecord->prontuario_id, 'fileId' => $medicalRecord->ultimoArquivo->arquivo_id]) }}" 
-                            class="cursor-pointer bg-blue-100 hover:bg-blue-200 rounded-full p-2 inline-flex items-center transition duration-150 ease-in-out">
+                            <a href="{{ route('records.view', ['idPatient' => $patient->cliente_id, 'idRecord' => $medicalRecord->prontuario_id, 'fileId' => $medicalRecord->ultimoArquivo->arquivo_id]) }}"
+                            class="cursor-pointer bg-blue-100 hover:bg-blue-200 rounded-full p-2 inline-flex items-center transition duration-150 ease-in-out ">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 -960 960 960" fill="#5985E1">
                                     <path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v240h-80v-200H520v-200H240v640h360v80H240Zm638 15L760-183v89h-80v-226h226v80h-90l118 118-56 57Zm-638-95v-640 640Z"/>
                                 </svg>
@@ -76,38 +76,43 @@
                     </div>
                 @endif
                 </div>
-                
+
                 @endisset
 
                 <!-- Formulário de Preenchimento -->
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_historico_familiar" :value="__('Histórico Familiar')" />
-                    <textarea id="prontuario_tx_historico_familiar" name="prontuario_tx_historico_familiar" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                    <textarea id="prontuario_tx_historico_familiar" name="prontuario_tx_historico_familiar" rows="8" class="block mt-1 w-full border-gray-300 dark:bg-gray-800 text-gray-200 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                         >{{ old('prontuario_tx_historico_familiar', $medicalRecord->prontuario_tx_historico_familiar ?? '') }}</textarea>
                 </div>
 
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_historico_social" :value="__('Histórico Social')" />
-                    <textarea id="prontuario_tx_historico_social" name="prontuario_tx_historico_social" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                    <textarea id="prontuario_tx_historico_social" name="prontuario_tx_historico_social" rows="8" class="block mt-1 w-full border-gray-300 dark:bg-gray-800 text-gray-200 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                         >{{ old('prontuario_tx_historico_social', $medicalRecord->prontuario_tx_historico_social ?? '') }}</textarea>
                 </div>
 
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_consideracoes" :value="__('Considerações')" />
-                    <textarea id="prontuario_tx_consideracoes" name="prontuario_tx_consideracoes" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                    <textarea id="prontuario_tx_consideracoes" name="prontuario_tx_consideracoes" rows="8" class="block mt-1 w-full border-gray-300  dark:bg-gray-800 text-gray-200 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                         >{{ old('prontuario_tx_consideracoes', $medicalRecord->prontuario_tx_consideracoes ?? '') }}</textarea>
                 </div>
 
                 <div class="mb-4">
                     <x-input-label for="prontuario_tx_observacao" :value="__('Observações')" />
-                    <textarea id="prontuario_tx_observacao" name="prontuario_tx_observacao" rows="8" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                    <textarea id="prontuario_tx_observacao" name="prontuario_tx_observacao" rows="8" class="block mt-1 w-full border-gray-300 rounded-md  dark:bg-gray-800 text-gray-200 shadow-sm focus:ring focus:ring-opacity-50"
                         >{{ old('prontuario_tx_observacao', $medicalRecord->prontuario_tx_observacao ?? '') }}</textarea>
                 </div>
 
                 <!-- Botão de Salvar -->
-                <div class="mt-8 flex justify-end">
+                <div class="mt-8 flex justify-end space-x-4">
                     <x-primary-button>
                         {{ __('Salvar Prontuário') }}
+                    </x-primary-button>
+                    <x-primary-button>
+                    <a href="{{ route('pdf.gerar', ['id' => $medicalRecord->prontuario_id]) }}" target="_blank" class="x-primary-button">
+                        {{ __('Abrir PDF') }}
+                    </a>
                     </x-primary-button>
                 </div>
             </form>

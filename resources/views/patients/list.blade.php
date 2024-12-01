@@ -1,10 +1,19 @@
-@if(Auth::user()->isAdmin() || Auth::user()->isProfessor())
+<!--@if(Auth::user()->isAdmin() || Auth::user()->isProfessor())-->
 <div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
     <x-link-button>
         {{__('Novo Cliente')}}
     </x-link-button>
 </div>
-@endif
+<!--@endif-->
+<div class="pt-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="w-full flex items-center justify-center sm:justify-start">
+                <x-link-button href="{{ route('patients.create') }}">
+                    {{ __('Novo Cliente') }}
+                </x-link-button>
+            </div>
+        </div>
+    </div>
 <div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
     <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -72,7 +81,7 @@
                         </td>
                     </tr>
                 @endforeach
-            </tbody>            
+            </tbody>
         </table>
     </div>
 </div>

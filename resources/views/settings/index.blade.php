@@ -5,15 +5,19 @@
             <!-- Formulário de busca -->
             <form method="POST" action="{{ route('setting.find') }}">
                 @csrf
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div style="display:flex; width:100%;" >
                     <!-- Busca de cliente -->
-                    <div>
+                    <div style="width:25%;">
                         <label for="cliente_busca" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Buscar Cliente</label>
                         <input type="text" name="cliente_busca" id="cliente_busca" class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Nome ou CPF do cliente">
                     </div>
+                    <div style="width:25%;">
+                        <label for="aluno_busca" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Buscar Aluno</label>
+                        <input type="text" name="aluno_busca" id="aluno_busca" class="mt-1 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Buscar RA ou Nome">
+                    </div>
 
                     <!-- Botão de busca -->
-                    <div class="flex items-end">
+                    <div style="width:25%;display:flex;justify-content:end;align-items:end;top:10px;" >
                         <x-primary-button>
                             Buscar
                         </x-primary-button>
@@ -23,17 +27,17 @@
 
             <!-- Resultados da busca -->
             <div class="mt-6">
-                <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">Resultados</h3>
+                <h3 class="text-lg font-medium text-gray-800 text-gray-800 dark:text-gray-200">Resultados</h3>
                 <form method="POST" action="{{ route('setting.store') }}">
                     @csrf
                     <div class="overflow-x-auto mt-4">
-                        <table class="min-w-full border-collapse border border-gray-300 dark:border-gray-700">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-800 dark:text-gray-200">
                             <thead>
                                 <tr>
-                                    <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Cliente</th>
-                                    <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Aluno</th>
-                                    <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Data de Início</th>
-                                    <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Data de Fim</th>
+                                    <th class="border border-gray-300 text-gray-800 dark:text-gray-200 px-4 py-2">Cliente</th>
+                                    <th class="border border-gray-300 text-gray-800 dark:text-gray-200 px-4 py-2">Aluno</th>
+                                    <th class="border border-gray-300 text-gray-800 dark:text-gray-200 px-4 py-2">Data de Início</th>
+                                    <th class="border border-gray-300 text-gray-800 dark:text-gray-200 px-4 py-2">Data de Fim</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,7 +59,7 @@
                                             <select name="aluno[{{ $patient->cliente_id }}]" id="aluno_{{ $patient->cliente_id }}" class="select-aluno w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md">
                                                 <option value="" disabled {{ empty($vinculoVigente) ? 'selected' : '' }}>Selecione um aluno</option>
                                                 @foreach ($students as $student)
-                                                    <option value="{{ $student->id }}" 
+                                                    <option value="{{ $student->id }}"
                                                         {{ !empty($vinculoVigente) && $vinculoVigente->vinculo_aluno_id == $student->id ? 'selected' : '' }}>
                                                         {{ $student->name }}
                                                     </option>
@@ -65,17 +69,17 @@
 
                                         <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
                                             <label for="data_inicio_{{ $patient->cliente_id }}" class="sr-only">Data de Início</label>
-                                            <input type="date" name="data_inicio[{{ $patient->cliente_id }}]" 
-                                                id="data_inicio_{{ $patient->cliente_id }}" 
-                                                value="{{ $vinculoVigente->vinculo_data_inicio ?? '' }}" 
+                                            <input type="date" name="data_inicio[{{ $patient->cliente_id }}]"
+                                                id="data_inicio_{{ $patient->cliente_id }}"
+                                                value="{{ $vinculoVigente->vinculo_data_inicio ?? '' }}"
                                                 class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md">
                                         </td>
 
                                         <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
                                             <label for="data_fim_{{ $patient->cliente_id }}" class="sr-only">Data de Fim</label>
-                                            <input type="date" name="data_fim[{{ $patient->cliente_id }}]" 
-                                                id="data_fim_{{ $patient->cliente_id }}" 
-                                                value="{{ $vinculoVigente->vinculo_data_fim ?? '' }}" 
+                                            <input type="date" name="data_fim[{{ $patient->cliente_id }}]"
+                                                id="data_fim_{{ $patient->cliente_id }}"
+                                                value="{{ $vinculoVigente->vinculo_data_fim ?? '' }}"
                                                 class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md">
                                         </td>
                                     </tr>

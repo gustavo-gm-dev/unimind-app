@@ -24,7 +24,7 @@
     </div>
 
     <!-- Detalhes da Sessão (Direita) -->
-    <div 
+    <div
         class="bg-gray-50 dark:bg-gray-900 rounded shadow p-4 lg:col-span-2"
         :class="selectedSession ? 'block' : 'hidden lg:block'"
     >
@@ -33,14 +33,14 @@
                 @foreach($sessions as $session)
                     <div x-show="selectedSession === {{ $session->sessao_id }}">
                         <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">{{ __('Detalhes da Sessão') }}</h3>
-                        <p><strong>{{ __('Data:') }}</strong> {{ \Carbon\Carbon::parse($session->sessao_dt_inicio)->format('d/m/Y') }}</p>
-                        <p><strong>{{ __('Principal:') }}</strong> {{ $session->sessao_tx_principal }}</p>
-                        <p><strong>{{ __('Procedimento:') }}</strong> {{ $session->sessao_tx_procedimento }}</p>
-                        <p><strong>{{ __('Encaminhamento:') }}</strong> {{ $session->sessao_tx_encaminhamento }}</p>
-                        <p><strong>{{ __('Observação:') }}</strong> {{ $session->sessao_tx_observacao }}</p>
+                        <p class="text-lg font-medium text-gray-800 dark:text-gray-200"><strong>{{ __('Data:') }}</strong> {{ \Carbon\Carbon::parse($session->sessao_dt_inicio)->format('d/m/Y') }}</p>
+                        <p class="text-lg font-medium text-gray-800 dark:text-gray-200"><strong>{{ __('Principal:') }}</strong> {{ $session->sessao_tx_principal }}</p>
+                        <p class="text-lg font-medium text-gray-800 dark:text-gray-200"><strong>{{ __('Procedimento:') }}</strong> {{ $session->sessao_tx_procedimento }}</p>
+                        <p class="text-lg font-medium text-gray-800 dark:text-gray-200"><strong>{{ __('Encaminhamento:') }}</strong> {{ $session->sessao_tx_encaminhamento }}</p>
+                        <p class="text-lg font-medium text-gray-800 dark:text-gray-200"><strong>{{ __('Observação:') }}</strong> {{ $session->sessao_tx_observacao }}</p>
 
                         <!-- Botões para Ação -->
-                        <div class="mt-6 space-x-4">
+                        <div class="mt-6 space-x-4  text-gray-300">
                             @if ($session->sessao_st_confirmado === 'PENDENTE')
                                 <x-link-button href="{{ route('session.edit', $session->sessao_id) }}">
                                     {{ __('Iniciar Sessão') }}
@@ -56,7 +56,7 @@
             </div>
         </template>
         <template x-if="!selectedSession">
-            <p class="text-gray-600 dark:text-gray-300">{{ __('Selecione uma sessão para visualizar os detalhes.') }}</p>
+            <p class="text-gray-600 dark:text-gray-300 dark: text-gray-300">{{ __('Selecione uma sessão para visualizar os detalhes.') }}</p>
         </template>
     </div>
 </div>

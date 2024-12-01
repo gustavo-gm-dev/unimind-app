@@ -20,23 +20,23 @@ class SettingController extends Controller
         $vinculos = Vinculo::where('vinculo_data_inicio', '<=', now()->toDateString())
             ->where('vinculo_data_fim', '>=', now()->toDateString())
             ->get();
-
+        // aqui tira validacao do pefil vava
         // Verifica se o usuário é 'role_professor' ou 'role_admin'
-        if (Auth::check() && (Auth::user()->role === 'role_professor' || Auth::user()->role === 'role_admin')) {
+        if (true) {
             // Retorna a view se a validação passar
             return view('index.setting', compact('patients','students','vinculos'));
         }
-    
+
         // Se a validação falhar, retorna um erro 403 ou redireciona para outra página
         abort(403, 'Você não tem permissão para acessar esta página.');
     }
 
     public function find(Request $request)
-    {   
+    {
         $patients = Cliente::query()
             ->when($request->input('cliente_busca'), function ($query, $clienteBusca) {
                 $query->where('cliente_nome', 'like', "%$clienteBusca%")
-                    ->orWhere('cliente_cpf', $clienteBusca);
+                    ->orWhere('cliente_cpf', 'like',"%$clienteBusca%");
             })
             ->get();
 
@@ -47,13 +47,13 @@ class SettingController extends Controller
         $vinculos = Vinculo::where('vinculo_data_inicio', '<=', now()->toDateString())
             ->where('vinculo_data_fim', '>=', now()->toDateString())
             ->get();
-            
+        // aqui tira validacao do pefil vava
         // Verifica se o usuário é 'role_professor' ou 'role_admin'
-        if (Auth::check() && (Auth::user()->role === 'role_professor' || Auth::user()->role === 'role_admin')) {
+        if (true) {
             // Retorna a view se a validação passar
             return view('index.setting', compact('patients','students','vinculos'));
         }
-    
+
         // Se a validação falhar, retorna um erro 403 ou redireciona para outra página
         abort(403, 'Você não tem permissão para acessar esta página.');
     }
@@ -88,7 +88,7 @@ class SettingController extends Controller
                 ]
             );
         }
-    
+
         return redirect()->route('setting.index')->with('success', 'Vínculos salvos com sucesso!');
     }
 

@@ -79,26 +79,27 @@ return new class extends Migration
             $table->text('prontuario_tx_historico_social');
             $table->text('prontuario_tx_consideracoes');
             $table->text('prontuario_tx_observacao');
-            
+
             $table->boolean('prontuario_st_validacao_prof')->default(false);
             $table->timestamps();
-        
+
             // Definindo a chave estrangeira
             $table->foreign('prontuario_cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
         });
-        
+
+    
 
         Schema::create('arquivos', function (Blueprint $table) {
             $table->id('arquivo_id');
             $table->unsignedBigInteger('arquivo_prontuario_id');
             $table->string('arquivo_url');
             $table->date('arquivo_dt_realizada');
-            $table->timestamps(); 
-        
+            $table->timestamps();
+
             // Chave estrangeira para vincular ao prontuario
             $table->foreign('arquivo_prontuario_id')->references('prontuario_id')->on('prontuarios')->onDelete('cascade');
         });
-        
+
 
         Schema::create('sessoes', function (Blueprint $table) {
             $table->id('sessao_id');
@@ -114,11 +115,11 @@ return new class extends Migration
             $table->boolean('sessao_st_presenca')->default(false);
             $table->enum('sessao_st_confirmado', ['PENDENTE', 'INICIADA', 'CONCLUIDA'])->default('PENDENTE');
             $table->timestamps();
-        
+
             // Definindo a chave estrangeira
             $table->foreign('sessao_prontuario_id')->references('prontuario_id')->on('prontuarios')->onDelete('cascade');
         });
-        
+
         Schema::create('vinculos', function (Blueprint $table) {
             $table->id(); // ID do vínculo
             $table->unsignedBigInteger('vinculo_usuario_id'); // ID do professor que criou o vínculo
@@ -127,7 +128,7 @@ return new class extends Migration
             $table->date('vinculo_data_inicio'); // Data de início do vínculo
             $table->date('vinculo_data_fim'); // Data de término do vínculo
             $table->timestamps();
-        
+
             // Relacionamentos
             $table->foreign('vinculo_usuario_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('vinculo_aluno_id')->references('id')->on('users')->onDelete('cascade');
@@ -135,7 +136,7 @@ return new class extends Migration
         });
     }
 
-    
+
 
     public function down(): void
     {

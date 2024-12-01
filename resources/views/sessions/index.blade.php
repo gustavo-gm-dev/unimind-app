@@ -5,7 +5,7 @@
             <x-dropdown-list>
                 <x-slot name="trigger">
                     <button class="inline-flex items-center px-3 py-2 border border-transparent leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                        <div class="w-full text-left text-gray-800 font-medium">
+                        <div class="w-full text-left text-gray-600 dark:text-gray-300 font-medium">
                             {{ __('Dados do Paciente') }}
                         </div>
                         <div class="ms-1">
@@ -42,7 +42,7 @@
             <x-dropdown-list>
                 <x-slot name="trigger">
                     <button class="inline-flex items-center px-3 py-2 border border-transparent leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                        <div class="w-full text-left text-gray-800 font-medium">
+                        <div class="w-full text-left text-gray-600 dark:text-gray-300 font-medium">
                             {{ __('Dados de Prontuário') }}
                         </div>
                         <div class="ms-1">
@@ -59,7 +59,7 @@
                             <li><strong>{{ __('Histórico Familiar:') }}</strong> {{ $medicalRecord->prontuario_tx_historico_familiar }}</li>
                             <li><strong>{{ __('Histórico Social:') }}</strong> {{ $medicalRecord->prontuario_tx_historico_social }}</li>
                             <li><strong>{{ __('Considerações:') }}</strong> {{ $medicalRecord->prontuario_tx_consideracoes }}</li>
-                            <li><strong>{{ __('Observações:') }}</strong> {{ $medicalRecord->prontuario_tx_observacao }}</li>                            
+                            <li><strong>{{ __('Observações:') }}</strong> {{ $medicalRecord->prontuario_tx_observacao }}</li>
                         </ul>
                     </div>
                 </x-slot>
@@ -74,40 +74,40 @@
             <form method="POST" action="{{ route('session.update', $session->sessao_id ?? null) }}">
                 @csrf
                 @method('PUT')
-            
+
                 <!-- Campo Principal -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_principal" :value="__('Principal')" />
-                    <textarea id="sessao_tx_principal" name="sessao_tx_principal" rows="8" 
+                    <textarea id="sessao_tx_principal" name="sessao_tx_principal" rows="8"
                               class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_principal', $session->sessao_tx_principal ?? '') }}</textarea>
                 </div>
-            
+
                 <!-- Campo Procedimento -->
-                <div class="mb-4">
+                <div class="mb-4 ">
                     <x-input-label for="sessao_tx_procedure" :value="__('Procedimento')" />
-                    <textarea id="sessao_tx_procedure" name="sessao_tx_procedure" rows="8" 
-                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_procedure', $session->sessao_tx_procedimento ?? '') }}</textarea>
+                    <textarea id="sessao_tx_procedure" name="sessao_tx_procedure" rows="8"
+                              class="block mt-1 w-full border-gray-300  dark:bg-gray-800 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_procedure', $session->sessao_tx_procedimento ?? '') }}</textarea>
                 </div>
-            
+
                 <!-- Campo Encaminhamento -->
                 <div class="mb-4">
                     <x-input-label for="sessao_tx_forwarding" :value="__('Encaminhamento')" />
-                    <textarea id="sessao_tx_forwarding" name="sessao_tx_forwarding" rows="8" 
+                    <textarea id="sessao_tx_forwarding" name="sessao_tx_forwarding" rows="8"
                               class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_forwarding', $session->sessao_tx_encaminhamento ?? '') }}</textarea>
                 </div>
-            
+
                 <!-- Campo Observações -->
-                <div class="mb-4">
+                <div class="mb-4 dark:bg-gray-800">
                     <x-input-label for="sessao_tx_observation" :value="__('Observações')" />
-                    <textarea id="sessao_tx_observation" name="sessao_tx_observation" rows="8" 
-                              class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_observation', $session->sessao_tx_observacao ?? '') }}</textarea>
+                    <textarea id="sessao_tx_observation" name="sessao_tx_observation" rows="8"
+                              class="block mt-1 w-full border-gray-300 dark:bg-gray-800 rounded-md shadow-sm focus:ring focus:ring-opacity-50">{{ old('sessao_tx_observation', $session->sessao_tx_observacao ?? '') }}</textarea>
                 </div>
-            
+
                 <!-- Botões -->
                 <div class="mt-8 flex justify-end space-x-4">
                     <!-- Campo Oculto para Ação -->
                     <input type="hidden" name="action" id="action" value="save">
-                    
+
                     <!-- Botão Salvar Sessão -->
                     <x-primary-button onclick="document.getElementById('action').value = 'save';">
                         {{ __('Salvar Sessão') }}
@@ -118,7 +118,7 @@
                         {{ __('Finalizar Sessão') }}
                     </x-primary-button>
                 </div>
-            </form>     
+            </form>
         </div>
     </div>
 </div>
@@ -131,7 +131,7 @@
             <x-dropdown-list>
                 <x-slot name="trigger">
                     <button class="inline-flex items-center px-3 py-2 border border-transparent leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                        <div class="w-full text-left text-gray-800 font-medium">
+                        <div class="w-full text-left text-gray-600 dark:text-gray-300 font-medium">
                             {{ __('Deseja subir um arquivo?') }}
                         </div>
                         <div class="ms-1">
@@ -146,32 +146,32 @@
                     <div class="px-6">
                         <form action="{{ route('records.upload', ['idPatient' => $patient->cliente_id, 'idRecord' => $medicalRecord->prontuario_id]) }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            
+
                             <!-- Input para Data -->
                             <div class="mb-4">
-                                <label for="session_date" class="block text-sm font-medium text-gray-700">{{ __('Data') }}</label>
-                                <input 
-                                    type="date" 
-                                    name="session_date" 
-                                    id="session_date" 
-                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
+                                <label for="session_date" class="block text-sm font-medium text-gray-600 dark:text-gray-300">{{ __('Data') }}</label>
+                                <input
+                                    type="date"
+                                    name="session_date"
+                                    id="session_date"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                                     required
                                 />
                             </div>
-                        
+
                             <!-- Input para Arquivo -->
                             <div class="mb-4">
                                 <label for="file" class="block text-sm font-medium text-gray-700">{{ __('Selecione um Arquivo') }}</label>
-                                <input 
-                                    type="file" 
-                                    name="file" 
+                                <input
+                                    type="file"
+                                    name="file"
                                     id="file"
                                     accept="application/pdf"
-                                    class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" 
-                                    required 
+                                    class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                                    required
                                 />
                             </div>
-                        
+
                             <!-- Botão de Submeter -->
                             <div class="mt-8 flex justify-end">
                                 <x-primary-button>

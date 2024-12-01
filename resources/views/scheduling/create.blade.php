@@ -19,16 +19,16 @@
 
                         <div class="mb-4">
                             <x-input-label for="sessao_periodo" :value="__('Período do Atendimento')" />
-                            <select id="sessao_periodo" name="sessao_periodo" class="block mt-1 w-full" required>
+                            <select id="sessao_periodo" name="sessao_periodo" class="block mt-1 w-full dark:bg-gray-800 text-gray-300" required>
                                 <option value="manha">{{ __('Manhã') }}</option>
                                 <option value="tarde">{{ __('Tarde') }}</option>
                                 <option value="noite">{{ __('Noite') }}</option>
                             </select>
-                        </div>                     
+                        </div>
 
                         <div class="mb-4">
                             <x-input-label for="sessao_tipo_atendimento" :value="__('Tipo de Atendimento')" />
-                            <select id="sessao_tipo_atendimento" name="sessao_tipo_atendimento" class="block mt-1 w-full">
+                            <select id="sessao_tipo_atendimento" name="sessao_tipo_atendimento" class="block mt-1 w-full dark:bg-gray-800 text-gray-300">
                                 <option value="PRESENCIAL">{{ __('Presencial') }}</option>
                                 <option value="REMOTO">{{ __('Remoto') }}</option>
                             </select>

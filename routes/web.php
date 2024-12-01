@@ -5,11 +5,13 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\gerarPdfController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\PDF;
+
 
 // Página inicial
 Route::get('/', function () {
@@ -49,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/sessao/{sessao_id}', [SessionController::class, 'show'])->name('session.show');
         Route::get('/sessao/{sessao_id}/edit', [SessionController::class, 'edit'])->name('session.edit');
         Route::put('/sessao/{sessao_id}', [SessionController::class, 'update'])->name('session.update');
+
     });
 
     // Configurações
@@ -82,12 +85,12 @@ Route::post('/vinculos', [VinculoController::class, 'salvar'])->name('vinculos.s
     });
 
     // Prontuários PDF
-    Route::get('/pdf', function(){
+    // Route::get('/pdf', function(){
 
-        $pdf = PDF::loadView('welcome');
-        return $pdf->download('o.pdf');
-    });
-
+    //     $pdf = PDF::loadView('welcome');
+    //     return $pdf->download('o.pdf');
+    // });
+    Route::get('/pdf/{id}', [gerarPdfController::class, 'gerarPdf'])->name('pdf.gerar');
 });
 
 // Rotas de autenticação

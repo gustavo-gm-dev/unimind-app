@@ -68,58 +68,58 @@
                 <h1 class="text-center fontletivo">Semestre letivo</h1>
             </div>
             <div>
-                <h1 class="text-center fonttitulo">2024/2</h1>
+                <h1 class="text-center fonttitulo">{{$anolet}}</h1>
             </div>
         </div>
     </div>
     <div class="caixa">
         <div>
-            <p>Número do prontuario:{{}} ("Campo será preechido pela Clinica-escola")</p>
+            <p>Número do prontuario:{{$id}} ("Campo será preechido pela Clinica-escola")</p>
         </div>
         <div>
-            <p>Data abertura/inicio dos atendimentos:{{}}</p>
+            <p>Data abertura/inicio dos atendimentos:{{$data_Cria}}</p>
         </div>
         <div>
-            <p>Nome Completo:{{}}</p>
+            <p>Nome Completo:{{$name}}</p>
         </div>
         <div class="divpai-cab">
             <div class="meiadiv">
-                <p>Data Nascimento:{{}}</p>
+                <p>Data Nascimento:{{$data_Nasci}}</p>
             </div>
             <div class="meiadiv">
-                <p>Gênero:[{{}}]M [{{}}]F []Outro:{{}}</p>
+                <p>Gênero:[.....]M [.....]F []Outro:.....</p>
             </div>
         </div>
         <div>
-            <p>Endereço:{{}}</p>
+            <p>Endereço:.....</p>
         </div>
         <div class="divpai-cab">
             <div class="meiadiv">
-                <p>Telefone(s):{{}}</p>
+                <p>Telefone(s):.....</p>
             </div>
             <div class="meiadiv">
-                <p>E-mail:{{}}</p>
+                <p>E-mail:.....</p>
             </div>
         </div>
         <div>
-            <p>Nome e telefone de contatos em caso de emergência:{{}}</p>
+            <p>Nome e telefone de contatos em caso de emergência:.....</p>
         </div>
         <div class="divpai-cab">
             <div class="meiadiv">
-                <p>Escolaridade:{{}}</p>
+                <p>Escolaridade:.....</p>
             </div>
             <div class="meiadiv">
-                <p>Ocupação:{{}}</p>
+                <p>Ocupação:.....</p>
             </div>
         </div>
         <div>
-            <p>Necessidades Epecial: [{{}}]Cognitiva [{{}}]Locomoção [{{}}]Visão [{{}}]Audição [{{}}]Outros:{{}}</p>
+            <p>Necessidades Epecial: [.....]Cognitiva [.....]Locomoção [.....]Visão [.....]Audição [.....]Outros:.....</p>
         </div>
         <div>
-            <p>Estágiario(a):{{}}</p>
+            <p>Estágiario(a):.....</p>
         </div>
         <div>
-            <p>Orientador(a):{{}}</p>
+            <p>Orientador(a):.....</p>
         </div>
     </div>
     <div class="caixa pai">

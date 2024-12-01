@@ -29,13 +29,13 @@
                     <!-- Gênero -->
                     <div class="mt-4">
                         <x-input-label for="gender" :value="__('Gênero')" />
-                        <select id="gender" name="gender" class="block mt-1 w-full">
+                        <select id="gender" name="gender" class="block mt-1 w-full dark:bg-gray-800">
                             <option value="M" @if($patient->cliente_genero == 'M') selected @endif>Masculino</option>
                             <option value="F" @if($patient->cliente_genero == 'F') selected @endif>Feminino</option>
                             <option value="O" @if($patient->cliente_genero == 'O') selected @endif>Outro</option>
                         </select>
                     </div>
-                    
+
                     <!-- CPF -->
                     <div class="mt-4">
                         <x-input-label for="cpf" :value="__('CPF')" />
@@ -57,7 +57,7 @@
                     <!-- Escolaridade -->
                     <div class="mt-4">
                         <x-input-label for="education" :value="__('Escolaridade')" />
-                        <select id="education" name="education" class="block mt-1 w-full">
+                        <select id="education" name="education" class="block mt-1 w-full dark:bg-gray-800">
                             <option value="" @if($patient->education == '') selected @endif>Não Informado</option>
                             <option value="nenhuma" @if($patient->education == 'nenhuma') selected @endif>Sem Escolaridade</option>
                             <option value="fundamental" @if($patient->education == 'fundamental') selected @endif>Ensino Fundamental</option>
@@ -74,7 +74,7 @@
                     <!-- Período de Atendimento -->
                     <div class="mt-4">
                         <x-input-label for="period" :value="__('Período')" />
-                        <select id="period" name="period" class="block mt-1 w-full">
+                        <select id="period" name="period" class="block mt-1 w-full dark:bg-gray-800">
                             <option value="manha" @if($patient->period == 'manha') selected @endif>Manhã</option>
                             <option value="tarde" @if($patient->period == 'tarde') selected @endif>Tarde</option>
                             <option value="noite" @if($patient->period == 'noite') selected @endif>Noite</option>
@@ -84,7 +84,7 @@
                     <!-- Tipo de Atendimento -->
                     <div class="mt-4">
                         <x-input-label for="service" :value="__('Tipo de Atendimento')" />
-                        <select id="service" name="service" class="block mt-1 w-full">
+                        <select id="service" name="service" class="block mt-1 w-full dark:bg-gray-800">
                             <option value="PRESENCIAL" @if($patient->service == 'PRESENCIAL') selected @endif>Presencial</option>
                             <option value="REMOTO" @if($patient->service == 'REMOTO') selected @endif>Remoto</option>
                         </select>
@@ -94,11 +94,11 @@
                     <div class="mt-4">
                         <label for="terms" class="flex items-center">
                             <input id="terms" name="terms" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" required>
-                            <span class="ml-2 text-sm text-gray-600">
+                            <span class="ml-2 text-sm text-gray-400">
                                 Paciente concorda com os termos descritos abaixo.<br>
-                                O paciente tem conciencia que não há previsão para início dos atendimentos, 
+                                O paciente tem conciencia que não há previsão para início dos atendimentos,
                                 pois ser chamado para os atendimentos dependerá de uma série de variáveis, tais como:
-                                número e estagiários/formandos que estarão atendendo; carga horária prevista para o estágio; 
+                                número e estagiários/formandos que estarão atendendo; carga horária prevista para o estágio;
                                 vagas abertas no período; disponibilidade de horários dos pacientes x estagiários; número de salas disponíveis para este horário...
                             </span>
                         </label>
