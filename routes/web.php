@@ -71,6 +71,8 @@ Route::post('/vinculos', [VinculoController::class, 'salvar'])->name('vinculos.s
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::patch('/update-professor', [ProfileController::class, 'updateProfessor'])->name('professor.update');
+
     });
 
     //Agendamento

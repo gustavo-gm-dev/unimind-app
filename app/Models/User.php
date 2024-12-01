@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'professor_id',
+        'ativo',
     ];
 
     /**
@@ -44,6 +46,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relacionamento recursivo: Usuário pertence a um professor
+    public function professor()
+    {
+        return $this->belongsTo(User::class, 'professor_id');
+    }
+
+    // Relacionamento recursivo: Professor tem vários alunos
+    public function alunos()
+    {
+        return $this->hasMany(User::class, 'professor_id');
     }
 
     const ROLE_ADMIN = 'role_admin';

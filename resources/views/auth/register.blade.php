@@ -12,8 +12,20 @@
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-email-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
+
+        <!-- Lista Professor -->
+        <div class="mt-4">
+            <x-input-label for="professor" :value="__('Qual seu professor?')" />
+                <select name="professor" id="professor" class="block mt-1 w-full" required>
+                    <option value="">Selecione um professor</option>
+                    @foreach ($listProfessor as $professor)
+                        <option value="{{ $professor->id }}">{{ $professor->name }}</option>
+                    @endforeach
+                </select>
+            <x-input-error :messages="$errors->get('professor')" class="mt-2" />
         </div>
 
         <!-- Password -->

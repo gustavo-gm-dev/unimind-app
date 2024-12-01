@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,8 +17,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $listProfessor = User::where('role', User::ROLE_PROFESSOR)->get();
         return view('profile.edit', [
             'user' => $request->user(),
+            'listProfessor' => $listProfessor,
         ]);
     }
 
@@ -45,16 +48,31 @@ class ProfileController extends Controller
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
-
+    
         $user = $request->user();
-
+    
+        // Inativa a conta em vez de deletar
+        $user->update(['active' => false]); // Supondo que você tenha um campo `active` no banco
+    
         Auth::logout();
-
-        $user->delete();
-
+    
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+    
+        return Redirect::to('/')->with('status', 'account-inactivated');
     }
+
+    public function updateProfessor(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('professorUpdate', [
+            'professor' => 'required|exists:users,id',
+        ]);
+    
+        $user = $request->user();
+        $user->update(['professor_id' => $request->input('professor')]);
+    
+        return back()->with('status', 'professor-updated');
+    }
+    
+    
 }

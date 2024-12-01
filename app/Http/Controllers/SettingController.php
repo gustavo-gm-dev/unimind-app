@@ -17,9 +17,7 @@ class SettingController extends Controller
         $students = User::query()
             ->where('role', User::ROLE_ALUNO)
             ->get();
-        $vinculos = Vinculo::where('vinculo_data_inicio', '<=', now()->toDateString())
-            ->where('vinculo_data_fim', '>=', now()->toDateString())
-            ->get();
+        $vinculos = Vinculo::all();
 
         // Verifica se o usuário é 'role_professor' ou 'role_admin'
         if (Auth::check() && (Auth::user()->role === 'role_professor' || Auth::user()->role === 'role_admin')) {
@@ -44,9 +42,7 @@ class SettingController extends Controller
             ->where('role', User::ROLE_ALUNO)
             ->get();
 
-        $vinculos = Vinculo::where('vinculo_data_inicio', '<=', now()->toDateString())
-            ->where('vinculo_data_fim', '>=', now()->toDateString())
-            ->get();
+        $vinculos = Vinculo::all();
             
         // Verifica se o usuário é 'role_professor' ou 'role_admin'
         if (Auth::check() && (Auth::user()->role === 'role_professor' || Auth::user()->role === 'role_admin')) {
@@ -82,9 +78,7 @@ class SettingController extends Controller
                     'vinculo_aluno_id' => $alunoId,
                 ],
                 [
-                    'vinculo_usuario_id' => auth()->id(),
-                    'vinculo_data_inicio' => $dataInicio,
-                    'vinculo_data_fim' => $dataFim,
+                    'vinculo_usuario_id' => auth()->id()
                 ]
             );
         }

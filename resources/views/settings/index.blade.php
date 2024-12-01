@@ -32,8 +32,6 @@
                                 <tr>
                                     <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Cliente</th>
                                     <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Aluno</th>
-                                    <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Data de Início</th>
-                                    <th class="border border-gray-300 dark:border-gray-700 px-4 py-2">Data de Fim</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,22 +59,6 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                        </td>
-
-                                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
-                                            <label for="data_inicio_{{ $patient->cliente_id }}" class="sr-only">Data de Início</label>
-                                            <input type="date" name="data_inicio[{{ $patient->cliente_id }}]" 
-                                                id="data_inicio_{{ $patient->cliente_id }}" 
-                                                value="{{ $vinculoVigente->vinculo_data_inicio ?? '' }}" 
-                                                class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md">
-                                        </td>
-
-                                        <td class="border border-gray-300 dark:border-gray-700 px-4 py-2">
-                                            <label for="data_fim_{{ $patient->cliente_id }}" class="sr-only">Data de Fim</label>
-                                            <input type="date" name="data_fim[{{ $patient->cliente_id }}]" 
-                                                id="data_fim_{{ $patient->cliente_id }}" 
-                                                value="{{ $vinculoVigente->vinculo_data_fim ?? '' }}" 
-                                                class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md">
                                         </td>
                                     </tr>
                                 @endforeach
