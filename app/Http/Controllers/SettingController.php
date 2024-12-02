@@ -33,12 +33,48 @@ class SettingController extends Controller
 
     public function find(Request $request)
     {
+        $clienteBusca = $request->input('cliente_busca');
+        $alunoBusca = $request->input('aluno_busca');
+        $ProfBusca = $request->input('prof_busca');
+
         $patients = Cliente::query()
-            ->when($request->input('cliente_busca'), function ($query, $clienteBusca) {
-                $query->where('cliente_nome', 'like', "%$clienteBusca%")
-                    ->orWhere('cliente_cpf', 'like',"%$clienteBusca%");
-            })
-            ->get();
+        ->leftJoin('users as user', 'clientes.cliente_usuario_Id', '=', 'user.id') // Join com a tabela de usuários
+        ->leftJoin('users as professor', 'user.User_professor_Id', '=', 'professor.id') // Join com 'users' como professor
+        ->when($clienteBusca, function ($query, $clienteBusca) {
+            // Filtro para busca por cliente
+            $query->where('clientes.cliente_nome', 'like', "%$clienteBusca%")
+                    ->orWhere('clientes.cliente_cpf', 'like', "%$clienteBusca%");
+        })
+        ->when($alunoBusca, function ($query, $alunoBusca) {
+            // Filtro para busca por aluno
+            $query->where('user.name', 'like', "%$alunoBusca%")
+                    ->orWhere('user.name', 'like', "%$alunoBusca%");
+        })
+        ->when($ProfBusca, function ($query, $ProfBusca) {
+            // Filtro para busca por aluno
+            $query->where('professor.name', 'like', "%$ProfBusca%")
+                    ->orWhere('professor.name', 'like', "%$ProfBusca%");
+        })
+        ->when(
+            !empty($ProfBusca) && !empty($alunoBusca) && !empty($clienteBusca),
+            function ($query) use ($ProfBusca, $alunoBusca, $clienteBusca) {
+                // Adicione os joins antes dos filtros, se necessário
+                $query->where('professor.name', 'like', "%$ProfBusca%")
+                      ->where('user.name', 'like', "%$alunoBusca%")
+                      ->where('clientes.cliente_nome', 'like', "%$clienteBusca%");
+            }
+        )
+
+        ->select(
+            'clientes.*',
+            'user.name as user_nome', // Nome do usuário da tabela 'users'
+            'professor.name as professor_nome' // Nome do professor da tabela 'users'
+        )
+
+    // Obter os resultados da consulta
+    ->get();
+
+
 
         $students = User::query()
             ->where('role', User::ROLE_ALUNO)

@@ -112,4 +112,39 @@ class PatientController extends Controller
 
         return redirect()->route('index.patient')->with('success', 'Paciente atualizado com sucesso!');
     }
+
+    public function buscar(Request $request)
+{
+    $patients = Cliente::query()
+        ->select([
+            'clientes.*',
+            'user.name as user_name',
+            'user.email as user_email',
+            'professor.name as professor_name',
+        ])
+        ->leftJoin('users as user', 'clientes.cliente_usuario_Id', '=', 'user.id')
+        ->leftJoin('users as professor', 'user.User_professor_Id', '=', 'professor.id')
+        ->when($request->filled('cliente_nome'), function ($query) use ($request) {
+            $query->where('clientes.cliente_nome', 'like', '%' . $request->cliente_nome . '%');
+        })
+        ->when($request->filled('cliente_cpf'), function ($query) use ($request) {
+            $query->where('clientes.cliente_cpf', $request->cliente_cpf);
+        })
+        ->when($request->filled('cliente_email'), function ($query) use ($request) {
+            $query->where('clientes.cliente_email', $request->cliente_email);
+        })
+        ->when($request->filled('cliente_telefone'), function ($query) use ($request) {
+            $query->where('clientes.cliente_telefone', 'like', '%' . $request->cliente_telefone . '%');
+        })
+        ->when($request->filled('cliente_st_confirma_dados'), function ($query) use ($request) {
+            $query->where('clientes.cliente_st_confirma_dados', $request->cliente_st_confirma_dados);
+        })
+        ->get();
+
+    // Retorna a view diretamente com os resultados da busca
+    return view('index.medical-record', compact('patients'));
 }
+
+}
+
+

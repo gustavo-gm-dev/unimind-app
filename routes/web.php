@@ -43,7 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         //arquivo
         Route::post('/patients/{idPatient}/records/{idRecord}/upload', [MedicalRecordController::class, 'uploadFile'])->name('records.upload');
         Route::get('/patients/{idPatient}/records/{idRecord}/file/{fileId}', [MedicalRecordController::class, 'viewFile'])->name('records.view');
-
+        Route::get('/buscar-clientes', [PatientController::class, 'buscar'])->name('prontuarios.buscar-clientes');
         //sessao
         Route::get('/sessoes', [SessionController::class, 'index'])->name('session.index');
         Route::get('/sessao/create/{prontuario_id}', [SessionController::class, 'create'])->name('session.create');
@@ -63,6 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/atrelar-aluno/{vinculo_cliente_id}/edit', [SettingController::class, 'edit'])->name('setting.edit');
         Route::put('/atrelar-aluno/{vinculo_aluno_id}/{vinculo_cliente_id}', [SettingController::class, 'update'])->name('setting.update');
         Route::post('/atrelar-aluno/buscar', [SettingController::class, 'find'])->name('setting.find');
+
+
 
 
 // Rota para salvar os vínculos
