@@ -13,12 +13,86 @@ class PatientController extends Controller
     public function index()
     {
         $user = Auth::user(); // Usuário autenticado
-    
+        
         // Recupera os pacientes acessíveis ao usuário
         $patients = Cliente::accessibleByUser($user)->get();
-    
-        return view('index.patient', compact('patients'));
+
+        // Define os filtros baseados no papel do usuário
+        $filters = [];
+        if ($user->isAluno()) {
+            $filters = [
+                'nome' => 'Nome Paciente',
+                'cpf' => 'CPF Paciente',
+                'telefone' => 'Telefone Paciente',
+                'status' => 'Status de Cadastro',
+            ];
+        } elseif ($user->isProfessor()) {
+            $filters = [
+                'aluno' => 'Aluno',
+                'nome' => 'Nome Paciente',
+                'cpf' => 'CPF Paciente',
+                'telefone' => 'Telefone Paciente',
+                'status' => 'Status de Cadastro',
+            ];
+        }
+
+        return view('index.patient', compact('patients', 'filters'));
     }
+
+    public function filterIndex(Request $request)
+    {
+        $user = Auth::user(); // Usuário autenticado
+    
+        // Define a consulta inicial
+        $query = Cliente::accessibleByUser($user);
+    
+        // Aplica os filtros enviados na requisição
+        if ($request->filled('nome')) {
+            $query->where('cliente_nome', 'like', '%' . $request->nome . '%');
+        }
+        if ($request->filled('cpf')) {
+            $query->where('cliente_cpf', 'like', '%' . $request->cpf . '%');
+        }
+        if ($request->filled('telefone')) {
+            $query->where('cliente_telefone', 'like', '%' . $request->telefone . '%');
+        }
+        if ($request->filled('status')) {
+            $query->where('cliente_st_cadastro', $request->status === 'sim');
+        }
+        if ($request->filled('aluno') && $user->isProfessor()) {
+            $query->whereHas('vinculo', function ($v) use ($request) {
+                $v->whereHas('aluno', function ($a) use ($request) {
+                    $a->where('name', 'like', '%' . $request->aluno . '%');
+                });
+            });
+        }
+    
+        // Executa a consulta
+        $patients = $query->get();
+    
+        // Define os filtros baseados no papel do usuário
+        $filters = [];
+        if ($user->isAluno()) {
+            $filters = [
+                'nome' => 'Nome Paciente',
+                'cpf' => 'CPF Paciente',
+                'telefone' => 'Telefone Paciente',
+                'status' => 'Status de Cadastro',
+            ];
+        } elseif ($user->isProfessor()) {
+            $filters = [
+                'aluno' => 'Aluno',
+                'nome' => 'Nome Paciente',
+                'cpf' => 'CPF Paciente',
+                'telefone' => 'Telefone Paciente',
+                'status' => 'Status de Cadastro',
+            ];
+        }
+    
+        return view('index.patient', compact('patients', 'filters'));
+    }
+    
+
     
 
     public function show($id)

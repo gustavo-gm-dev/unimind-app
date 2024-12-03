@@ -1,4 +1,25 @@
 <div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
+    <form method="GET" action="{{ route('patients.filter') }}">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach ($filters as $key => $label)
+                <div>
+                    <label for="{{ $key }}" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                        {{ $label }}
+                    </label>
+                    <input type="text" name="{{ $key }}" id="{{ $key }}"
+                        value="{{ request($key) }}"
+                        class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 dark:border-gray-600 rounded-md">
+                </div>
+            @endforeach
+        </div>
+        <div class="mt-4 flex justify-end">
+            <x-primary-button>
+                Filtrar
+            </x-primary-button>
+        </div>
+    </form>
+</div>
+<div class="max-w-7xl mx-auto mt-4 sm:px-6 lg:px-8">
     <x-link-button href="{{ route('patients.create') }}">
         {{__('Novo Cliente')}}
     </x-link-button>

@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/{id}/update', [PatientController::class, 'update'])->name('patients.update');
         Route::get('/create', [PatientController::class, 'create'])->name('patients.create');
         Route::post('/store', [PatientController::class, 'store'])->name('patients.store');
+        Route::get('/filter', [PatientController::class, 'filterIndex'])->name('patients.filter');
     });
 
     // Prontuários
@@ -38,6 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [MedicalRecordController::class, 'index'])->name('index.medical-record');
         Route::get('/{id}/edit', [MedicalRecordController::class, 'edit'])->name('medical-records.edit');
         Route::put('/medical-records/{clinete_id}/save', [MedicalRecordController::class, 'save'])->name('medical-records.save');
+        Route::get('/filter', [MedicalRecordController::class, 'filterList'])->name('medical-records.filter');
+
         //arquivo
         Route::post('/patients/{idPatient}/records/{idRecord}/upload', [MedicalRecordController::class, 'uploadFile'])->name('records.upload');
         Route::get('/patients/{idPatient}/records/{idRecord}/file/{fileId}', [MedicalRecordController::class, 'viewFile'])->name('records.view');

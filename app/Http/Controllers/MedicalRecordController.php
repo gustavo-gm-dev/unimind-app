@@ -12,14 +12,56 @@ use Illuminate\Support\Facades\Auth;
 
 class MedicalRecordController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = auth()->user(); // Usuário autenticado
+        $user = auth()->user();
 
-        // Filtra os clientes que estão vinculados ao aluno autenticado
-        $patients = Cliente::accessibleByUser($user)->get();
+        // Inicializa a consulta com os pacientes acessíveis ao usuário
+        $query = Cliente::accessibleByUser($user)->with('prontuario', 'prontuario.sessoes');
 
-        return view('index.medical-record', compact('patients'));
+        // Define os filtros disponíveis
+        $filters = [];
+        if ($user->isAluno()) {
+            $filters = [
+                'nome' => 'Nome Paciente',
+                'data_sessao' => 'Data Sessão',
+            ];
+        } elseif ($user->isProfessor()) {
+            $filters = [
+                'aluno' => 'Aluno',
+                'status_validacao' => 'Status Validação',
+                'nome' => 'Nome Paciente',
+                'data_sessao' => 'Data Sessão',
+            ];
+        }
+
+        // Aplica os filtros
+        if ($request->filled('nome')) {
+            $query->where('cliente_nome', 'like', '%' . $request->nome . '%');
+        }
+
+        if ($request->filled('data_sessao')) {
+            $query->whereHas('prontuario.sessoes', function ($q) use ($request) {
+                $q->whereDate('sessao_dt_inicio', $request->data_sessao);
+            });
+        }
+
+        if ($request->filled('status_validacao') && $user->isProfessor()) {
+            $query->whereHas('prontuario', function ($q) use ($request) {
+                $q->where('prontuario_st_validacao_prof', $request->status_validacao);
+            });
+        }
+
+        if ($request->filled('aluno') && $user->isProfessor()) {
+            $query->whereHas('vinculo.aluno', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->aluno . '%');
+            });
+        }
+
+        // Obtem os resultados
+        $patients = $query->get();
+
+        return view('index.medical-record', compact('patients', 'filters'));
     }
 
     public function edit($id)
